@@ -1,4 +1,39 @@
 body {
     background-color: black;
-    color:white
+    color:white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+#createdFlashcards{
+    border: 0.1rem solid white;
+    
+}
+#content  {
+    display: flex;
+    justify-content: center;
+
+}
+#subContent {
+    display: flex;
+    flex-direction: column;
+    margin: 2vh 0 2vh 0 ;
+}
+#content button {
+    padding: 1.5vw;
+    font-size: 1.5rem;
+    border-radius: 5vw;
+}
+label input {
+    border-radius: 1vw;
+    height: 10vh;
+    font-size: 1.5rem;
+    padding: 2vw;
+    
+}
+#startButton {
+    padding: 1vw;
+    font-size: 1.5rem;
+    border-radius: 3vw;
+}
+#makeFlashcard {
+    cursor: pointer;
 }

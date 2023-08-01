@@ -1,11 +1,30 @@
 body {
-    background-color: black;
+    background-color:  rgb(85, 85, 181);
     color:white;
     font-family: Georgia, 'Times New Roman', Times, serif;
+
+}
+@keyframes appear {
+    from {
+        opacity: 0.2;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes show {
+    from {
+        height: 0;
+    }
+    to {
+        height: 30vh;
+    }
 }
 #createdFlashcards{
     border: 0.1rem solid white;
-    
+    display: flex;
+    flex-wrap: wrap;
+
 }
 #content  {
     display: flex;
@@ -17,14 +36,19 @@ body {
     flex-direction: column;
     margin: 2vh 0 2vh 0 ;
 }
+#subContent div{
+    display: flex;
+    flex-direction: column;
+    margin: 3vh 0 3vh 0;
+}
 #content button {
     padding: 1.5vw;
     font-size: 1.5rem;
     border-radius: 5vw;
 }
-label input {
+#flashcardFront, #flashcardBack, #titleFlashcard, #descriptionFlashcard {
     border-radius: 1vw;
-    height: 10vh;
+    height: 2vh;
     font-size: 1.5rem;
     padding: 2vw;
     
@@ -36,4 +60,102 @@ label input {
 }
 #makeFlashcard {
     cursor: pointer;
+}
+
+.flashcardContainer {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    width: 20vw;
+    margin:  3vh 3vw 3vh 3vw;;
+    background-color: white;
+    border: 2px solid white;
+    font-size: 1.2rem;
+    word-break: break-all;
+    animation: show 0.5s ease  1 forwards;
+    color:black;
+    box-shadow: 0px 0px 30px 0px rgba(66, 68, 90, 1);
+   
+
+}
+.flashcardContainer div {
+ 
+    font-weight: bold;
+    animation: appear 0.5s ease  1 forwards;
+    margin: 2vw;
+    text-shadow: 0px 0px 3px rgba(66, 68, 90, 1);
+}
+
+.flashcardContainer div:first-child {
+   
+    font-size: 1.5rem;
+    text-transform: uppercase;
+
+ 
+ 
+
+ 
+}
+
+.positonAbsoluteRemoveBtn,.positonAbsoluteEditBtn,.positonAbsoluteShowBtn {
+    cursor: pointer;
+    position: absolute;
+
+    border-radius: 50vw;
+}
+
+.positonAbsoluteRemoveBtn:hover, .positonAbsoluteEditBtn:hover, .positonAbsoluteShowBtn:hover {
+    background-color: rgba(128, 128, 128, 0.298);
+}
+.positonAbsoluteRemoveBtn {
+    top:0;
+    right:0;
+}
+.positonAbsoluteEditBtn {
+   
+    top:0;
+    left:0;
+   
+}
+.positonAbsoluteShowBtn {
+   bottom: 0;
+    right: 0;
+   
+   
+}
+.flashcardContainer div:last-child {
+  
+    font-size: 0.9rem;
+    
+  
+  }
+
+
+.presentFlashcardPosition {
+
+   
+    color:black;
+    background-color: white;
+    width: 25vw;
+    height: 100vh;
+    position: absolute;
+    top: 50%;
+    left: 40%;
+    z-index: 10;
+
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+    font-size: 1.2rem;
+    word-break: break-all;
+    animation: show 0.5s ease  1 forwards;
+    box-shadow: 0px 0px 30px 0px rgba(66, 68, 90, 1);
+} 
+.front {
+    background-color: #f1f1f1;
+}
+.back {
+    background-color: #eaeaea;
+    transform: rotateY(180deg);
 }

@@ -6,17 +6,39 @@
     <title>Flashcards</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<script  type="text/javascript" src="script.js"></script>
+<body id="body">
+    <h1>
+        Flashcards
+    </h1>
 <section id="content">
 
     <section id="subContent">
-        <label for="flashcard" name="flashcard" >
-            <input type="text">
-        </label>
+        <div>
+            <label for="titleFlashcard" name="titleFlashcard" >
+                <div>Flashcard title</div>
+                <input  id="titleFlashcard"  type="text"  placeholder="Title"  maxlength="20"  value="Title">
+            </label>
+
+            <label for="descriptionFlashcard" name="descriptionFlashcard" >
+                <div>Short description</div>
+                <input  id="descriptionFlashcard"  type="text"  placeholder="Description"  maxlength="30" value="Desc" >
+            </label>
+
+            <label for="flashcardFront" name="flashcardFront" >
+                <div>Flashcard Front</div>
+                <input  id="flashcardFront"  type="text"  placeholder="Front" value="Front" >
+            </label>
+
+            <label for="flashcardBack" name="flashcardBack" >
+                <div> Flashcard Back</div>
+                <input  id="flashcardBack"  type="text"  placeholder="Back" value="Back">
+            </label>
+        
+        </div>
         <button id="makeFlashcard">
                 Make a Flashcards
         </button>
+
     </section>
 
 </section>
@@ -25,16 +47,17 @@
 </body>
 
 
-
+<h1>
+    Your Flashcards
+</h1>
 <section id="createdFlashcards">
 
-    <h1>
-        Your Flashcards
-    </h1>
+
 
 </section>
 
-<button id="startButton">
-    Start
-</button>
+    <button id="startButton">
+        Start
+    </button>
+    <script  type="text/javascript" src="script.js"></script>
 </html>

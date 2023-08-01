@@ -90,7 +90,7 @@ makeFlashcard.addEventListener("click", () => {
          
             
 
-            titleFlashcard.value = " ";//remove everything in input after click
+            titleFlashcard.value = " ";//removee everything in input after click
             descriptionFlashcard.value = " ";//remove everything in input after click
             flashcardFront.value = " ";//remove everything in input after click
             flashcardBack.value = " ";//remove everything in input after click

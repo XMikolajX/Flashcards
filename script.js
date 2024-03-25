@@ -5,19 +5,34 @@ let app = {
   answer: document.getElementById("answer"),
   flashcardMaker: document.getElementById("flashcardMaker"),
 
-
- 
-
 };
-app.flashcardSection =  document.getElementById("flashcards");
-app.flashcardSubmitted = flashcardSection.createElement("div");
-app.questionSubmitted = flashcardSubmitted.createElement("span");
-app.questionAnswer = flashcardSubmitted.createElement("span");
+/*CREATING ELEMENTS*/
 
+app.flashcardSection =  document.getElementById("flashcards");
+app.flashcardSubmitted = document.createElement("div");
+app.questionSubmitted = document.createElement("span");
+app.questionAnswer = document.createElement("span");
+/*ADDING A TO A SECTION*/
+
+app.flashcardSection.appendChild(app.flashcardSubmitted);
+app.flashcardSubmitted.appendChild(app.questionSubmitted);
+app.flashcardSubmitted.appendChild(app.questionAnswer);
+console.log(app.flashcardSubmitted) //test
+/*ADDING A CLASS*/
+app.flashcardSubmitted.classList.add("flashcardSubmitted");
+app.questionSubmitted.classList.add("questionSubmitted");
+app.questionAnswer.classList.add("questionAnswer");
 
 app.flashcardMaker.addEventListener("click",  (e)=> {
-  e.preventDefault(); // Zapobieganie domyślnemu zachowaniu
-  console.log(app.question.value); // Poprawne użycie dla uzyskania wartości pola question
+
+  e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
+
+  /* ASSING VALUES FROM INPUT*/
   
+ 
+    app.questionSubmitted.textContent = app.question.value 
+    app.questionAnswer.textContent = app.answer.value 
+  
+
 
 })

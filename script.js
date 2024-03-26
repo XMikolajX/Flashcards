@@ -29,7 +29,11 @@ app.flashcardMaker.addEventListener("click",  (e)=> {
 
   /* ASSING VALUES FROM INPUT*/
   
- 
+  
+  if (app.flashcardSection.children.length === 0) {
+
+  }
+  
     app.questionSubmitted.textContent = app.question.value 
     app.questionAnswer.textContent = app.answer.value 
   

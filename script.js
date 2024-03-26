@@ -4,6 +4,7 @@ let app = {
   question: document.getElementById("question"),
   answer: document.getElementById("answer"),
   flashcardMaker: document.getElementById("flashcardMaker"),
+  flashcardRemover: document.getElementById("flashcardRemover"),
 
 };
 /*CREATING ELEMENTS*/
@@ -14,10 +15,8 @@ app.questionSubmitted = document.createElement("span");
 app.questionAnswer = document.createElement("span");
 /*ADDING A TO A SECTION*/
 
-app.flashcardSection.appendChild(app.flashcardSubmitted);
-app.flashcardSubmitted.appendChild(app.questionSubmitted);
+
 app.flashcardSubmitted.appendChild(app.questionAnswer);
-console.log(app.flashcardSubmitted) //test
 /*ADDING A CLASS*/
 app.flashcardSubmitted.classList.add("flashcardSubmitted");
 app.questionSubmitted.classList.add("questionSubmitted");
@@ -27,16 +26,32 @@ app.flashcardMaker.addEventListener("click",  (e)=> {
 
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
-  /* ASSING VALUES FROM INPUT*/
-  
-  
-  if (app.flashcardSection.children.length === 0) {
+if(app.flashcardSection.children.length <= 5 ) {
+  //MAKING NEW  FLASHCARDS
+  let newFlashcard = document.createElement("div");
+  let newQuestion = document.createElement("span");
+  let newAnswer = document.createElement("span");
 
-  }
-  
-    app.questionSubmitted.textContent = app.question.value 
-    app.questionAnswer.textContent = app.answer.value 
-  
+  newQuestion.textContent = app.question.value;
+  newAnswer.textContent =  app.answer.value;
 
 
+  //ADDING CLASS
+  newFlashcard.classList.add("flashcardSubmitted");
+  newQuestion.classList.add("questionSubmitted");
+  newAnswer.classList.add("questionAnswer");
+
+  //ADDING NEW ELEMENTS TO flashcardSection
+  newFlashcard.append(newQuestion);
+  newFlashcard.append(newAnswer);
+  app.flashcardSection.append(newFlashcard);
+}
+else {
+  console.log(" Flashcard limit reached");
+};
+
+})
+app.flashcardRemover.addEventListener("click",e => {
+  e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
+   
 })

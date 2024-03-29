@@ -33,6 +33,50 @@ body {
     cursor: pointer;
     height: 7vh;
 }
+.Battlefield {
+    display: flex;
+    align-items: center;
+    background-color: brown;
+    z-index: 100;
+    position: absolute;
+    top: 25vh;
+    left: 25vw;
+    border: 1px solid black;
+    border-radius: 3px;
+    width: 50vw;
+    height: 50vh;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.choice {
+    display: flex;
+ 
+
+}
+.KnownFlashcard{
+    background-color: blue;
+
+}
+.UnknownFlashcard{
+    background-color: red;
+  
+}
+.KnownFlashcard, .UnknownFlashcard {
+    text-align: center;
+    position: relative;
+    display: block;
+    bottom: 0;
+    padding: 10px;
+    border: 1px solid black;
+    cursor: pointer;
+    margin: 0 2vw;
+}
+.KnownFlashcard:hover  {
+    font-weight: bold;
+}
+.UnknownFlashcard:hover  {
+    font-weight: bold;
+}
 @media (max-width: 800px) {
     #flashcards {
         display: grid;

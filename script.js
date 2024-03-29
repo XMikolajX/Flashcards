@@ -5,23 +5,25 @@ let app = {
   answer: document.getElementById("answer"),
   flashcardMaker: document.getElementById("flashcardMaker"),
   flashcardRemover: document.getElementById("flashcardRemover"),
-
+  flashcardStart: document.getElementById("flashcardStart"),
+  flashcards: [],
 };
 /*CREATING ELEMENTS*/
 
 app.flashcardSection =  document.getElementById("flashcards");
-app.flashcardSubmitted = document.createElement("div");
-app.questionSubmitted = document.createElement("span");
-app.questionAnswer = document.createElement("span");
+
+// app.flashcardSubmitted = document.createElement("div");
+// app.questionSubmitted = document.createElement("span");
+// app.questionAnswer = document.createElement("span");
 
 /*ADDING A TO A SECTION*/
 
 
-app.flashcardSubmitted.appendChild(app.questionAnswer);
-/*ADDING A CLASS*/
-app.flashcardSubmitted.classList.add("flashcardSubmitted");
-app.questionSubmitted.classList.add("questionSubmitted");
-app.questionAnswer.classList.add("questionAnswer");
+// app.flashcardSubmitted.appendChild(app.questionAnswer);
+// /*ADDING A CLASS*/
+// app.flashcardSubmitted.classList.add("flashcardSubmitted");
+// app.questionSubmitted.classList.add("questionSubmitted");
+// app.questionAnswer.classList.add("questionAnswer");
 
 app.flashcardMaker.addEventListener("click",  (e)=> {
 
@@ -52,14 +54,16 @@ if(app.flashcardSection.children.length <= 5 ) {
   newFlashcard.append(newEditButton);
   app.flashcardSection.append(newFlashcard);
 
-
+  app.flashcards.push({question: newQuestion.textContent, answer: newAnswer.textContent })
   newEditButton.addEventListener("click",  ()=> { 
 
+  //ADDING NEW FLASHCARD TO ARRAY
+
     
-    app.question.value = newQuestion.textContent;
-    app.answer.value = newAnswer.textContent
-    newQuestion.textContent = null;
-    newAnswer.textContent = null;
+  app.question.value = newQuestion.textContent;
+  app.answer.value = newAnswer.textContent
+  newQuestion.textContent = null;
+  newAnswer.textContent = null;
     if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
      app.flashcardSection.removeChild(newFlashcard);
     }
@@ -70,22 +74,28 @@ if(app.flashcardSection.children.length <= 5 ) {
 else {
   console.log(" Flashcard limit reached");
 };
-flashcardStart.addEventListener("click",  e => {
-  e.preventDefault();
-})
+
 })
 app.flashcardRemover.addEventListener("click",e => {
+
   e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
    if(app.flashcardSection.children.length > 0){
-    function RemoveLastFlashcard(){
-
-   
     let lastFlashcard = app.flashcardSection.lastElementChild;
     app.flashcardSection.removeChild(lastFlashcard);
-  }
-  RemoveLastFlashcard()
+    app.flashcards.pop();
    }
    else {
     console.log("Nie ma żadnych fiszek do usuniecia")
    }
+
 })
+app.flashcardStart.addEventListener("click",  (e) => {
+
+  e.preventDefault();
+  app.flashcards.forEach((flashcard, index) => {
+    setTimeout(() => {
+      alert(`Pytanie: ${flashcard.question}\nOdpowiedź: ${flashcard.answer}`);
+    }, index * 2000);
+  });
+  
+});

@@ -47,6 +47,20 @@ body {
     height: 50vh;
     flex-direction: column;
     justify-content: flex-end;
+    padding:  10px 25px;
+}
+.BattlefieldFlashcard {
+    background-color: darkgreen;
+    text-align: center;
+    display: flex;
+    overflow-wrap: break-word;
+    width: 50vw;
+    height: 100vh;
+    flex-direction: column;
+    padding:  0 10px;
+}
+.BattlefieldFlashcardAnswer, .BattlefieldFlashcardQuestion {
+    margin: 10px 0 ;
 }
 .choice {
     display: flex;

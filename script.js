@@ -85,17 +85,63 @@ app.flashcardRemover.addEventListener("click",e => {
     app.flashcards.pop();
    }
    else {
-    console.log("Nie ma żadnych fiszek do usuniecia")
+    console.log("Nie ma żadnych fiszek do usuniecia");
    }
 
 })
 app.flashcardStart.addEventListener("click",  (e) => {
 
   e.preventDefault();
-  app.flashcards.forEach((flashcard, index) => {
-    setTimeout(() => {
-      alert(`Pytanie: ${flashcard.question}\nOdpowiedź: ${flashcard.answer}`);
-    }, index * 2000);
-  });
+
+  //CREATING ELEMENTS
+  let Battlefield = document.createElement("section");
+  let BattlefieldFlashcard = document.createElement("section");
+  let BattlefieldFlashcardQuestion = document.createElement("div");
+  let BattlefieldFlashcardAnswer = document.createElement("div");
+  let choice = document.createElement("section");
+  let KnownFlashcard = document.createElement("div");
+  let UnknownFlashcard = document.createElement("div");
+
+  KnownFlashcard.textContent = "Known";
+  UnknownFlashcard.textContent = "Unknown"
+
+  //ADDING CLASS
+  Battlefield.classList.add("Battlefield");
+  BattlefieldFlashcard.classList.add("BattlefieldFlashcard");
+  BattlefieldFlashcardQuestion.classList.add("BattlefieldFlashcardQuestion");
+  BattlefieldFlashcardAnswer.classList.add("BattlefieldFlashcardAnswer");
+  choice.classList.add("choice");
+  KnownFlashcard.classList.add("KnownFlashcard");
+  UnknownFlashcard.classList.add("UnknownFlashcard");
+
+  //ADDING ELEMENTS
+  choice.append(UnknownFlashcard);
+  choice.append(KnownFlashcard);
+  BattlefieldFlashcard.append(BattlefieldFlashcardQuestion);
+  BattlefieldFlashcard.append(BattlefieldFlashcardAnswer);
+  Battlefield.append(BattlefieldFlashcard);
+  Battlefield.append(choice);
+
+  document.body.appendChild(Battlefield);
+
+
+  //
+  function changeFlashcard(){
+    if(app.flashcards.length > 0){
+      let currentFlashcard = app.flashcards.shift(); //FIRST FLASHCARD
+      BattlefieldFlashcardQuestion.textContent =  currentFlashcard.question;
+      BattlefieldFlashcardAnswer.textContent =  currentFlashcard.answer;
+    }
+    else {
+      BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
+    
+      
+    }
+  }
+
+  KnownFlashcard.addEventListener("click", changeFlashcard);
+  UnknownFlashcard.addEventListener("click", changeFlashcard);
+  //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
+  changeFlashcard();
   
 });

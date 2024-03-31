@@ -1,12 +1,14 @@
 "use strict";
 
 let app = {
+
   question: document.getElementById("question"),
   answer: document.getElementById("answer"),
   flashcardMaker: document.getElementById("flashcardMaker"),
   flashcardRemover: document.getElementById("flashcardRemover"),
   flashcardStart: document.getElementById("flashcardStart"),
   flashcards: [],
+  
 };
 /*CREATING ELEMENTS*/
 
@@ -30,6 +32,7 @@ app.flashcardMaker.addEventListener("click",  (e)=> {
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
 if(app.flashcardSection.children.length <= 5 ) {
+
   //MAKING NEW  FLASHCARDS
   let newFlashcard = document.createElement("div");
   let newQuestion = document.createElement("span");
@@ -55,7 +58,9 @@ if(app.flashcardSection.children.length <= 5 ) {
   app.flashcardSection.append(newFlashcard);
 
   app.flashcards.push({question: newQuestion.textContent, answer: newAnswer.textContent })
+
   newEditButton.addEventListener("click",  ()=> { 
+
 
   //ADDING NEW FLASHCARD TO ARRAY
 
@@ -64,8 +69,11 @@ if(app.flashcardSection.children.length <= 5 ) {
   app.answer.value = newAnswer.textContent
   newQuestion.textContent = null;
   newAnswer.textContent = null;
+
     if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
+
      app.flashcardSection.removeChild(newFlashcard);
+
     }
     
 })
@@ -79,13 +87,18 @@ else {
 app.flashcardRemover.addEventListener("click",e => {
 
   e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
+
    if(app.flashcardSection.children.length > 0){
+
     let lastFlashcard = app.flashcardSection.lastElementChild;
     app.flashcardSection.removeChild(lastFlashcard);
     app.flashcards.pop();
    }
+
    else {
+
     console.log("Nie ma żadnych fiszek do usuniecia");
+
    }
 
 })
@@ -101,9 +114,12 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let choice = document.createElement("section");
   let KnownFlashcard = document.createElement("div");
   let UnknownFlashcard = document.createElement("div");
+  let BattlefieldCloseButton = document.createElement("img");
 
   KnownFlashcard.textContent = "Known";
   UnknownFlashcard.textContent = "Unknown"
+  BattlefieldCloseButton.src = "img/close_FILL0_wght400_GRAD0_opsz48.svg";
+  BattlefieldCloseButton.alt = "close button";
 
   //ADDING CLASS
   Battlefield.classList.add("Battlefield");
@@ -113,12 +129,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
   choice.classList.add("choice");
   KnownFlashcard.classList.add("KnownFlashcard");
   UnknownFlashcard.classList.add("UnknownFlashcard");
+  BattlefieldCloseButton.classList.add("closeButton");
 
   //ADDING ELEMENTS
   choice.append(UnknownFlashcard);
   choice.append(KnownFlashcard);
   BattlefieldFlashcard.append(BattlefieldFlashcardQuestion);
   BattlefieldFlashcard.append(BattlefieldFlashcardAnswer);
+  Battlefield.append(BattlefieldCloseButton);
   Battlefield.append(BattlefieldFlashcard);
   Battlefield.append(choice);
 
@@ -127,11 +145,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   //
   function changeFlashcard(){
+
     if(app.flashcards.length > 0){
+
       let currentFlashcard = app.flashcards.shift(); //FIRST FLASHCARD
       BattlefieldFlashcardQuestion.textContent =  currentFlashcard.question;
       BattlefieldFlashcardAnswer.textContent =  currentFlashcard.answer;
     }
+
     else {
       BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
     
@@ -141,7 +162,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   KnownFlashcard.addEventListener("click", changeFlashcard);
   UnknownFlashcard.addEventListener("click", changeFlashcard);
+
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
   changeFlashcard();
-  
+
+
+  BattlefieldCloseButton.addEventListener("click", ()=> {
+
+    document.body.removeChild(Battlefield);
+  })
+
 });

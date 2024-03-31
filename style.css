@@ -1,14 +1,86 @@
 body {
-    background-color:darkgrey;
+    background-color:rgba(250, 248, 248, 0.992);
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    opacity: 0;
+    width: 0;
+  }
+#makeFlashcards {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  /*
+  @keyframes letter-spacing {
+    20%{
+        letter-spacing: 3px;
+    }
+    40%{
+        letter-spacing: 6px;
+    }
+    
+    60%{
+        letter-spacing: 9px;
+    }
+    
+    80%{
+        letter-spacing: 12px;
+    }
+    
+    100%{
+        letter-spacing: 15px;
+    }
+    
+    
+  }
+  */
+#makeFlashcards h1 {
+    font-size: 2.5rem;
+    letter-spacing: 15px;
+   
+    /*animation: letter-spacing 1s ease infinite ;*/
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .flashcardSubmitted, .flashcards, .BattlefieldFlashcard {
+    opacity: 0; 
+    animation: fade-in 1s forwards;
+ 
+  }
+#makeFlashcards input {
+    padding: 10px;
+    margin: 5px;
+    background-color: rgb(239, 246, 246);
+  }
+#makeFlashcards button {
+    padding: 10px;
+    margin: 5px;
+    background-color: rgb(242, 255, 255);
+}
+#makeFlashcards button:hover {
+    cursor: pointer;
+    background-color:  rgb(222, 244, 244);;
 }
 #flashcards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background-color:blueviolet;
+    background-color:rgb(239, 246, 246);
+    border: 0.5px solid rgb(206, 203, 203);
+    border-radius: 10px;
   
 }
 .flashcardSubmitted {
-    background-color:bisque;
+    background-color:rgb(250, 241, 231);
+    border: 1px solid black;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     margin: 3vh 1vw;
@@ -20,11 +92,10 @@ body {
 
 .questionAnswer, .questionSubmitted {
     padding: 2vh 1vw;
-  
     word-wrap: break-word;
 
 }
-.editButton {
+.editButton, .closeButton {
     z-index: 10;
     position: absolute;
     top:0;
@@ -33,46 +104,59 @@ body {
     cursor: pointer;
     height: 7vh;
 }
+.closeButton {
+    top:0;
+    right: 25vw;
+}
 .Battlefield {
     display: flex;
     align-items: center;
-    background-color: brown;
+    background-color: rgba(250, 248, 248, 0.992);
     z-index: 100;
     position: absolute;
-    top: 25vh;
-    left: 25vw;
+    top: 0;
+    left: 0;
     border: 1px solid black;
     border-radius: 3px;
-    width: 50vw;
-    height: 50vh;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     justify-content: flex-end;
-    padding:  10px 25px;
+    padding:  5px 10px;
 }
 .BattlefieldFlashcard {
-    background-color: darkgreen;
+    background-color: rgb(250, 241, 231);
+    border: 1px solid black;
+    border-radius: 10px;
     text-align: center;
     display: flex;
     overflow-wrap: break-word;
     width: 50vw;
-    height: 100vh;
+    height: 80vh;
     flex-direction: column;
     padding:  0 10px;
 }
-.BattlefieldFlashcardAnswer, .BattlefieldFlashcardQuestion {
-    margin: 10px 0 ;
+.BattlefieldFlashcardQuestion, .BattlefieldFlashcardAnswer {
+    font-size: 2rem;
+}
+.BattlefieldFlashcardQuestion {
+    margin: 25px 0 0 0;
+
+}
+.BattlefieldFlashcardAnswer {
+    margin: 100px 0 0 0;
 }
 .choice {
     display: flex;
- 
+    margin: 10px 0 0 0 ;
 
 }
 .KnownFlashcard{
-    background-color: blue;
+    background-color: rgb(239, 246, 246);
 
 }
 .UnknownFlashcard{
-    background-color: red;
+    background-color: rgb(239, 246, 246);
   
 }
 .KnownFlashcard, .UnknownFlashcard {
@@ -86,17 +170,16 @@ body {
     margin: 0 2vw;
 }
 .KnownFlashcard:hover  {
-    font-weight: bold;
+    background-color: rgb(216, 221, 221);
 }
 .UnknownFlashcard:hover  {
-    font-weight: bold;
+    background-color: rgb(216, 221, 221);
 }
 @media (max-width: 800px) {
     #flashcards {
-        display: grid;
+    
         grid-template-columns: repeat(2, 1fr);
-        background-color:blueviolet;
-        font-size: 0.9rem;
+    
     
       
     }

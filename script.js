@@ -26,64 +26,99 @@ app.flashcardSection =  document.getElementById("flashcards");
 // app.flashcardSubmitted.classList.add("flashcardSubmitted");
 // app.questionSubmitted.classList.add("questionSubmitted");
 // app.questionAnswer.classList.add("questionAnswer");
+// Funkcja do generowania fiszek na podstawie danych z LocalStorage
+function generateFlashcardsFromLocalStorage() {
+  let storedFlashcards = localStorage.getItem('flashcards');
+  if (storedFlashcards) {
+    let parsedFlashcards = JSON.parse(storedFlashcards); //Convert to OBJ
+    parsedFlashcards.forEach(flashcard => {
+      let newFlashcard = document.createElement("div");
+      let newQuestion = document.createElement("span");
+      let newAnswer = document.createElement("span");
+      let newEditButton = document.createElement("img");
 
-app.flashcardMaker.addEventListener("click",  (e)=> {
+      newQuestion.textContent = flashcard.question;
+      newAnswer.textContent = flashcard.answer;
+      newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
+      newEditButton.alt = "edit button";
 
+      newFlashcard.classList.add("flashcardSubmitted");
+      newQuestion.classList.add("questionSubmitted");
+      newAnswer.classList.add("questionAnswer");
+      newEditButton.classList.add("editButton");
+
+      newFlashcard.appendChild(newQuestion);
+      newFlashcard.appendChild(newAnswer);
+      newFlashcard.appendChild(newEditButton);
+      app.flashcardSection.appendChild(newFlashcard);
+
+      newEditButton.addEventListener("click", () => {
+        app.question.value = newQuestion.textContent;
+        app.answer.value = newAnswer.textContent;
+        newQuestion.textContent = null;
+        newAnswer.textContent = null;
+        app.flashcardSection.removeChild(newFlashcard);
+        // Aktualizacja danych w LocalStorage po usunięciu fiszki
+        app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);
+        localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+      });
+    });
+  }
+}
+
+// Wywołanie funkcji generującej fiszki z LocalStorage podczas ładowania strony
+generateFlashcardsFromLocalStorage();
+
+app.flashcardMaker.addEventListener("click", (e) => {
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
-if(app.flashcardSection.children.length <= 5 ) {
+  if (app.flashcardSection.children.length <= 5) {
+    let newFlashcard = document.createElement("div");
+    let newQuestion = document.createElement("span");
+    let newAnswer = document.createElement("span");
+    let newEditButton = document.createElement("img");
 
-  //MAKING NEW  FLASHCARDS
-  let newFlashcard = document.createElement("div");
-  let newQuestion = document.createElement("span");
-  let newAnswer = document.createElement("span");
-  let newEditButton = document.createElement("img");
+    newQuestion.textContent = app.question.value;
+    newAnswer.textContent = app.answer.value;
+    newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
+    newEditButton.alt = "edit button";
 
+    if (newQuestion.textContent.trim() !== "" && newAnswer.textContent.trim() !== "") {
+      newFlashcard.classList.add("flashcardSubmitted");
+      newQuestion.classList.add("questionSubmitted");
+      newAnswer.classList.add("questionAnswer");
+      newEditButton.classList.add("editButton");
 
-  newQuestion.textContent = app.question.value;
-  newAnswer.textContent =  app.answer.value;
-  newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
-  newEditButton.alt = "edit button";
+      newFlashcard.append(newQuestion);
+      newFlashcard.append(newAnswer);
+      newFlashcard.append(newEditButton);
+      app.flashcardSection.append(newFlashcard);
 
-  //ADDING CLASS
-  newFlashcard.classList.add("flashcardSubmitted");
-  newQuestion.classList.add("questionSubmitted");
-  newAnswer.classList.add("questionAnswer");
-  newEditButton.classList.add("editButton");
+      // Dodanie nowej fiszki do LocalStorage
+      app.flashcards.push({ question: newQuestion.textContent, answer: newAnswer.textContent });
+      localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
 
-  //ADDING NEW ELEMENTS TO flashcardSection
-  newFlashcard.append(newQuestion);
-  newFlashcard.append(newAnswer);
-  newFlashcard.append(newEditButton);
-  app.flashcardSection.append(newFlashcard);
+      newEditButton.addEventListener("click", () => {
+        app.question.value = newQuestion.textContent;
+        app.answer.value = newAnswer.textContent;
+        newQuestion.textContent = null;
+        newAnswer.textContent = null;
 
-  app.flashcards.push({question: newQuestion.textContent, answer: newAnswer.textContent })
-
-  newEditButton.addEventListener("click",  ()=> { 
-
-
-  //ADDING NEW FLASHCARD TO ARRAY
-
-    
-  app.question.value = newQuestion.textContent;
-  app.answer.value = newAnswer.textContent
-  newQuestion.textContent = null;
-  newAnswer.textContent = null;
-
-    if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
-
-     app.flashcardSection.removeChild(newFlashcard);
-
+        if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
+          app.flashcardSection.removeChild(newFlashcard);
+          // Aktualizacja danych w LocalStorage po usunięciu fiszki
+          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== newQuestion.textContent && flashcard.answer !== newAnswer.textContent);
+          localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+        }
+      });
+    } else {
+      alert("Complete the fields")
     }
-    
-})
+  } else {
+    console.log(" Flashcard limit reached");
+  }
+});
 
-}
-else {
-  console.log(" Flashcard limit reached");
-};
-
-})
 app.flashcardRemover.addEventListener("click",e => {
 
   e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
@@ -93,11 +128,13 @@ app.flashcardRemover.addEventListener("click",e => {
     let lastFlashcard = app.flashcardSection.lastElementChild;
     app.flashcardSection.removeChild(lastFlashcard);
     app.flashcards.pop();
+    app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);
+    localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
    }
 
    else {
 
-    console.log("Nie ma żadnych fiszek do usuniecia");
+    console.log("No more flashcards to remove");
 
    }
 

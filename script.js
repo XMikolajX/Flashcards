@@ -26,26 +26,36 @@ app.flashcardSection =  document.getElementById("flashcards");
 // app.flashcardSubmitted.classList.add("flashcardSubmitted");
 // app.questionSubmitted.classList.add("questionSubmitted");
 // app.questionAnswer.classList.add("questionAnswer");
-// Funkcja do generowania fiszek na podstawie danych z LocalStorage
+// Funkcja to generate flashcard on  based from  LocalStorage
+
 function generateFlashcardsFromLocalStorage() {
-  let storedFlashcards = localStorage.getItem('flashcards');
-  if (storedFlashcards) {
-    let parsedFlashcards = JSON.parse(storedFlashcards); //Convert to OBJ
-    parsedFlashcards.forEach(flashcard => {
+  let storedFlashcards = localStorage.getItem('flashcards');  // Take from localStorage item as key "flashcards" and assing to variable
+  if (storedFlashcards) { //if exists
+    let parsedFlashcards = JSON.parse(storedFlashcards); //Convert to OBJ from string
+    parsedFlashcards.forEach(flashcard => { //for every element of this array...
+
+      // CREATE ELEMENT
+
       let newFlashcard = document.createElement("div");
       let newQuestion = document.createElement("span");
       let newAnswer = document.createElement("span");
       let newEditButton = document.createElement("img");
+
+      
 
       newQuestion.textContent = flashcard.question;
       newAnswer.textContent = flashcard.answer;
       newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
       newEditButton.alt = "edit button";
 
+      // ADD CLASS
+
       newFlashcard.classList.add("flashcardSubmitted");
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
+
+      //APPEND
 
       newFlashcard.appendChild(newQuestion);
       newFlashcard.appendChild(newAnswer);
@@ -53,21 +63,34 @@ function generateFlashcardsFromLocalStorage() {
       app.flashcardSection.appendChild(newFlashcard);
 
       newEditButton.addEventListener("click", () => {
+
         app.question.value = newQuestion.textContent;
         app.answer.value = newAnswer.textContent;
+
         newQuestion.textContent = null;
         newAnswer.textContent = null;
+
         app.flashcardSection.removeChild(newFlashcard);
-        // Aktualizacja danych w LocalStorage po usunięciu fiszki
-        app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);
-        localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+
+
+        
+        // Update data  in LocalStorage after remove flashcard
+        app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent); //assing every flashcard from array flashcards to app.flashcards  which is not equel to given condition
+        
+        localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // convert app.flashcards to json obj string, then setItem() save our data
+
       });
+
     });
+
   }
+
 }
 
-// Wywołanie funkcji generującej fiszki z LocalStorage podczas ładowania strony
+
 generateFlashcardsFromLocalStorage();
+
+
 
 app.flashcardMaker.addEventListener("click", (e) => {
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
@@ -84,6 +107,7 @@ app.flashcardMaker.addEventListener("click", (e) => {
     newEditButton.alt = "edit button";
 
     if (newQuestion.textContent.trim() !== "" && newAnswer.textContent.trim() !== "") {
+
       newFlashcard.classList.add("flashcardSubmitted");
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
@@ -94,42 +118,63 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newFlashcard.append(newEditButton);
       app.flashcardSection.append(newFlashcard);
 
-      // Dodanie nowej fiszki do LocalStorage
-      app.flashcards.push({ question: newQuestion.textContent, answer: newAnswer.textContent });
-      localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+      // ADD NEW FLASHCARD TO LocalStorage
+
+      app.flashcards.push({ question: newQuestion.textContent, answer: newAnswer.textContent }); //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+
+      localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
 
       newEditButton.addEventListener("click", () => {
+
         app.question.value = newQuestion.textContent;
         app.answer.value = newAnswer.textContent;
+
         newQuestion.textContent = null;
         newAnswer.textContent = null;
 
         if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
+
           app.flashcardSection.removeChild(newFlashcard);
-          // Aktualizacja danych w LocalStorage po usunięciu fiszki
-          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== newQuestion.textContent && flashcard.answer !== newAnswer.textContent);
-          localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+
+          // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
+
+          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== newQuestion.textContent && flashcard.answer !== newAnswer.textContent);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+
+          localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
         }
       });
     } else {
+
       alert("Complete the fields")
+
     }
-  } else {
+  }
+   else {
+
     console.log(" Flashcard limit reached");
+
   }
 });
 
 app.flashcardRemover.addEventListener("click",e => {
+
+  //Create variables to avoid scope errors
+
+  let newQuestion = ""; 
+  let newAnswer = "";
 
   e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
    if(app.flashcardSection.children.length > 0){
 
     let lastFlashcard = app.flashcardSection.lastElementChild;
+    
     app.flashcardSection.removeChild(lastFlashcard);
+
     app.flashcards.pop();
-    app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);
-    localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // Zapis do LocalStorage
+    
+    app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+    localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
    }
 
    else {

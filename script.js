@@ -75,7 +75,7 @@ function generateFlashcardsFromLocalStorage() {
 
         
         // Update data  in LocalStorage after remove flashcard
-        app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent); //assing every flashcard from array flashcards to app.flashcards  which is not equel to given condition
+        app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null); //assing every flashcard from array flashcards to app.flashcards  which is not equel to given condition
         
         localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // convert app.flashcards to json obj string, then setItem() save our data
 
@@ -86,7 +86,6 @@ function generateFlashcardsFromLocalStorage() {
   }
 
 }
-
 
 generateFlashcardsFromLocalStorage();
 
@@ -138,7 +137,7 @@ app.flashcardMaker.addEventListener("click", (e) => {
 
           // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
 
-          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== newQuestion.textContent && flashcard.answer !== newAnswer.textContent);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== null && flashcard.answer !== null);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
 
           localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
         }
@@ -156,15 +155,13 @@ app.flashcardMaker.addEventListener("click", (e) => {
   }
 });
 
-app.flashcardRemover.addEventListener("click",e => {
+app.flashcardRemover.addEventListener("click", (e)=> {
 
-  //Create variables to avoid scope errors
-
-  let newQuestion = ""; 
-  let newAnswer = "";
 
   e.preventDefault() // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
+
+  
    if(app.flashcardSection.children.length > 0){
 
     let lastFlashcard = app.flashcardSection.lastElementChild;
@@ -173,7 +170,8 @@ app.flashcardRemover.addEventListener("click",e => {
 
     app.flashcards.pop();
     
-    app.flashcards = app.flashcards.filter(flash => flash.question !== newQuestion.textContent && flash.answer !== newAnswer.textContent);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+    app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+    
     localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
    }
 
@@ -181,9 +179,10 @@ app.flashcardRemover.addEventListener("click",e => {
 
     console.log("No more flashcards to remove");
 
-   }
+   };
 
-})
+});
+
 app.flashcardStart.addEventListener("click",  (e) => {
 
   e.preventDefault();

@@ -31,6 +31,7 @@ app.flashcardSection =  document.getElementById("flashcards");
 function generateFlashcardsFromLocalStorage() {
   let storedFlashcards = localStorage.getItem('flashcards');  // Take from localStorage item as key "flashcards" and assing to variable
   if (storedFlashcards) { //if exists
+    app.flashcards = JSON.parse(storedFlashcards);//assing existed flashcard to app.flashcards to prevent bug with reload and deleting all array properties
     let parsedFlashcards = JSON.parse(storedFlashcards); //Convert to OBJ from string
     parsedFlashcards.forEach(flashcard => { //for every element of this array...
 
@@ -131,22 +132,23 @@ app.flashcardMaker.addEventListener("click", (e) => {
         newQuestion.textContent = null;
         newAnswer.textContent = null;
 
-        if (newQuestion.textContent.trim() === '' && newAnswer.textContent.trim() === '') {
 
           app.flashcardSection.removeChild(newFlashcard);
 
           // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
+          app.flashcards.pop()
 
           app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== null && flashcard.answer !== null);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
 
           localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
-        }
       });
-    } else {
-
-      alert("Complete the fields")
 
     }
+      else {
+
+        alert("Complete the fields")
+
+      }
   }
    else {
 

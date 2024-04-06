@@ -1,12 +1,14 @@
 body {
     background-color:rgba(240, 240, 240, 0.992);
     overflow-x: hidden;
+    width: 100vw;
 }
 ::-webkit-scrollbar {
     opacity: 0;
     width: 0;
   }
 #makeFlashcards {
+    width: 100vw;
     text-align: center;
     display: flex;
     flex-direction: column;

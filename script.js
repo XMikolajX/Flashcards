@@ -129,7 +129,7 @@ app.flashcardMaker.addEventListener("click", (e) => {
 
       localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
 
-      newEditButton.addEventListener("click", (e) => {
+      newEditButton.addEventListener("click", () => {
         app.question.value = newQuestion.textContent;
         app.answer.value = newAnswer.textContent;
 
@@ -142,7 +142,9 @@ app.flashcardMaker.addEventListener("click", (e) => {
           // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
 
           app.flashcards.forEach((flashcard, index) => {
-            if (flashcard.question === app.question.value && flashcard.answer === app.answer.value) {
+
+            if ((flashcard.question === app.question.value) && (flashcard.answer === app.answer.value)) {
+              
                 app.flashcards.splice(index, 1);
             }
         });//remove flashcard from array
@@ -236,32 +238,51 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
 
   //
-  function changeFlashcard(){
+  let currentFlashcardIndex = 0;
 
-    if(app.flashcards.length > 0){
+  function changeFlashcard() {
 
-      let currentFlashcard = app.flashcards.shift(); //FIRST FLASHCARD
-      BattlefieldFlashcardQuestion.textContent =  currentFlashcard.question;
-      BattlefieldFlashcardAnswer.textContent =  currentFlashcard.answer;
-    }
+      if (app.flashcards.length > 0) { //if is greater than  0
 
-    else {
-      BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
-    
+          if (currentFlashcardIndex < app.flashcards.length) {  //if  app.flashcards.length is greater than currentFlashcardIndex 
+
+              let currentFlashcard = app.flashcards[currentFlashcardIndex]; //assing to currentFlashcard 
+
+              BattlefieldFlashcardQuestion.textContent = currentFlashcard.question;
+              BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
+
+              currentFlashcardIndex++;
+
+          }
+           else {
+
+              BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
+
+          }
+
+      } 
+      else {
+
+          BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
+
+      }
+      if(  BattlefieldFlashcard.textContent == "Nie ma więcej fiszek"){
       
     }
+
   }
 
   KnownFlashcard.addEventListener("click", changeFlashcard);
   UnknownFlashcard.addEventListener("click", changeFlashcard);
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
-  changeFlashcard();
-
+  changeFlashcard()
 
   BattlefieldCloseButton.addEventListener("click", ()=> {
 
     document.body.removeChild(Battlefield);
   })
-
+  if(  BattlefieldFlashcard.textContent == "Nie ma więcej fiszek"){
+      console.log("test")
+  }
 });

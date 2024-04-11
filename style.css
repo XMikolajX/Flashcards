@@ -154,11 +154,11 @@ body {
 
 }
 .KnownFlashcard{
-    background-color: rgb(239, 246, 246);
+    background-color: rgb(0, 244, 150);
 
 }
 .UnknownFlashcard{
-    background-color: rgb(239, 246, 246);
+    background-color: rgb(229, 71, 18);
   
 }
 .KnownFlashcard, .UnknownFlashcard {

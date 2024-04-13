@@ -209,6 +209,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let KnownFlashcard = document.createElement("div");
   let UnknownFlashcard = document.createElement("div");
   let BattlefieldCloseButton = document.createElement("img");
+  let result = document.createElement("section");
+  let goodAnswer = document.createElement("div");
+  let badAnswer = document.createElement("div");
 
   KnownFlashcard.textContent = "Known";
   UnknownFlashcard.textContent = "Unknown"
@@ -224,7 +227,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
   KnownFlashcard.classList.add("KnownFlashcard");
   UnknownFlashcard.classList.add("UnknownFlashcard");
   BattlefieldCloseButton.classList.add("closeButton");
-
+  result.classList.add("result");
+  goodAnswer.classList.add("goodAnswer");
+  badAnswer.classList.add("badAnswer");
   //ADDING ELEMENTS
   choice.append(UnknownFlashcard);
   choice.append(KnownFlashcard);
@@ -256,24 +261,41 @@ app.flashcardStart.addEventListener("click",  (e) => {
           }
            else {
 
-              BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
+              BattlefieldFlashcard.textContent = "There are no more flashcards";
 
+
+              result.append(goodAnswer, badAnswer);
+
+              BattlefieldFlashcard.append(result);
+
+              KnownFlashcard.removeEventListener("click");
+              UnknownFlashcard.removeEventListener("click");
           }
 
-      } 
+      }
+
       else {
 
-          BattlefieldFlashcard.textContent = "Nie ma więcej fiszek";
+          BattlefieldFlashcard.textContent = "There are no flashcards created";
 
       }
-      if(  BattlefieldFlashcard.textContent == "Nie ma więcej fiszek"){
-      
-    }
 
+ 
   }
+  
+  let clickCount1 = 0;
+  let clickCount2 = 0;
 
-  KnownFlashcard.addEventListener("click", changeFlashcard);
-  UnknownFlashcard.addEventListener("click", changeFlashcard);
+  KnownFlashcard.addEventListener("click", () =>{ changeFlashcard(); 
+    clickCount1++;
+    goodAnswer.textContent = "Know : " +  clickCount1;
+
+  });
+  UnknownFlashcard.addEventListener("click",() =>{  changeFlashcard();
+    clickCount2++;
+    badAnswer.textContent = "Unknow : " + clickCount2;
+
+  });
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
   changeFlashcard()
@@ -281,8 +303,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
   BattlefieldCloseButton.addEventListener("click", ()=> {
 
     document.body.removeChild(Battlefield);
+    
   })
-  if(  BattlefieldFlashcard.textContent == "Nie ma więcej fiszek"){
-      console.log("test")
-  }
+
 });

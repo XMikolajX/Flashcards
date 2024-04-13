@@ -132,6 +132,7 @@ body {
     border-radius: 10px;
     text-align: center;
     display: flex;
+    justify-content: center;
     overflow-wrap: break-word;
     width: 50vw;
     height: 80vh;
@@ -176,6 +177,13 @@ body {
 }
 .UnknownFlashcard:hover  {
     background-color: rgb(216, 221, 221);
+}
+.result{
+    display: flex;
+    justify-content: center
+}
+.goodAnswer, .badAnswer{
+margin: 10px;
 }
 @media (max-width: 800px) {
     #flashcards {

@@ -100,7 +100,7 @@ generateFlashcardsFromLocalStorage();
 app.flashcardMaker.addEventListener("click", (e) => {
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
-  if (app.flashcardSection.children.length <= 5) {
+  if (app.flashcardSection.children.length <= 10000) {
     let newFlashcard = document.createElement("div");
     let newQuestion = document.createElement("span");
     let newAnswer = document.createElement("span");
@@ -268,8 +268,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
               BattlefieldFlashcard.append(result);
 
-              KnownFlashcard.removeEventListener("click");
-              UnknownFlashcard.removeEventListener("click");
+              choice.removeChild(UnknownFlashcard);
+              choice.removeChild(KnownFlashcard);
           }
 
       }
@@ -299,7 +299,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
   changeFlashcard()
-
+  
   BattlefieldCloseButton.addEventListener("click", ()=> {
 
     document.body.removeChild(Battlefield);

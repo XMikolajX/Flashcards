@@ -14,19 +14,7 @@ let app = {
 
 app.flashcardSection =  document.getElementById("flashcards");
 
-// app.flashcardSubmitted = document.createElement("div");
-// app.questionSubmitted = document.createElement("span");
-// app.questionAnswer = document.createElement("span");
 
-/*ADDING A TO A SECTION*/
-
-
-// app.flashcardSubmitted.appendChild(app.questionAnswer);
-// /*ADDING A CLASS*/
-// app.flashcardSubmitted.classList.add("flashcardSubmitted");
-// app.questionSubmitted.classList.add("questionSubmitted");
-// app.questionAnswer.classList.add("questionAnswer");
-// Funkcja to generate flashcard on  based from  LocalStorage
 
 function generateFlashcardsFromLocalStorage() {
   let storedFlashcards = localStorage.getItem('flashcards');  // Take from localStorage item as key "flashcards" and assing to variable
@@ -308,6 +296,13 @@ app.flashcardStart.addEventListener("click",  (e) => {
     clickCount1++;
     goodAnswer.textContent = "Know : " +  clickCount1;
 
+    Battlefield.classList.add('green');
+
+    setTimeout(() => {
+      choice.classList.remove('shake');
+      Battlefield.classList.remove('green');
+    }, 1000);
+
   });
 
 
@@ -315,7 +310,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
     clickCount2++;
     badAnswer.textContent = "Unknow : " + clickCount2;
 
-   
+    choice.classList.add('shake');
+    
+    Battlefield.classList.add('red');
+
+    setTimeout(() => {
+      choice.classList.remove('shake');
+      Battlefield.classList.remove('red');
+    }, 1000);
   });
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard

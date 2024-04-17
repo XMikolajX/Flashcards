@@ -208,6 +208,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let choice = document.createElement("section");
   let KnownFlashcard = document.createElement("div");
   let UnknownFlashcard = document.createElement("div");
+  let hint = document.createElement("div");
   let BattlefieldCloseButton = document.createElement("img");
   let result = document.createElement("section");
   let goodAnswer = document.createElement("div");
@@ -215,6 +216,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   KnownFlashcard.textContent = "Known";
   UnknownFlashcard.textContent = "Unknown"
+  hint.textContent = "Hint"
   BattlefieldCloseButton.src = "img/close_FILL0_wght400_GRAD0_opsz48.svg";
   BattlefieldCloseButton.alt = "close button";
 
@@ -226,12 +228,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
   choice.classList.add("choice");
   KnownFlashcard.classList.add("KnownFlashcard");
   UnknownFlashcard.classList.add("UnknownFlashcard");
+  hint.classList.add("hint");
   BattlefieldCloseButton.classList.add("closeButton");
   result.classList.add("result");
   goodAnswer.classList.add("goodAnswer");
   badAnswer.classList.add("badAnswer");
   //ADDING ELEMENTS
   choice.append(UnknownFlashcard);
+  choice.append(hint);
   choice.append(KnownFlashcard);
   BattlefieldFlashcard.append(BattlefieldFlashcardQuestion);
   BattlefieldFlashcard.append(BattlefieldFlashcardAnswer);
@@ -254,7 +258,18 @@ app.flashcardStart.addEventListener("click",  (e) => {
               let currentFlashcard = app.flashcards[currentFlashcardIndex]; //assing to currentFlashcard 
 
               BattlefieldFlashcardQuestion.textContent = currentFlashcard.question;
-              BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
+              hint.addEventListener("click",() =>{ 
+                BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
+                if (BattlefieldFlashcardAnswer.textContent === currentFlashcard.answer) {
+
+                  setTimeout(() => {
+                      BattlefieldFlashcardAnswer.textContent = '';
+                  }, 400); 
+
+              }
+            
+              });
+            
 
               currentFlashcardIndex++;
 
@@ -270,6 +285,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
               choice.removeChild(UnknownFlashcard);
               choice.removeChild(KnownFlashcard);
+              choice.removeChild(hint);
           }
 
       }
@@ -277,7 +293,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
       else {
 
           BattlefieldFlashcard.textContent = "There are no flashcards created";
-
+          choice.removeChild(UnknownFlashcard);
+          choice.removeChild(KnownFlashcard);
+          choice.removeChild(hint);
       }
 
  
@@ -291,10 +309,13 @@ app.flashcardStart.addEventListener("click",  (e) => {
     goodAnswer.textContent = "Know : " +  clickCount1;
 
   });
+
+
   UnknownFlashcard.addEventListener("click",() =>{  changeFlashcard();
     clickCount2++;
     badAnswer.textContent = "Unknow : " + clickCount2;
 
+   
   });
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard

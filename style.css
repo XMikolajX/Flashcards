@@ -163,11 +163,14 @@ body {
     background-color: rgb(0, 244, 150);
 
 }
+.hint {
+    background-color: rgb(0, 224, 244);
+}
 .UnknownFlashcard{
     background-color: rgb(229, 71, 18);
   
 }
-.KnownFlashcard, .UnknownFlashcard {
+.KnownFlashcard, .UnknownFlashcard, .hint {
     text-align: center;
     position: relative;
     display: block;
@@ -183,6 +186,9 @@ body {
 .UnknownFlashcard:hover  {
     background-color: rgb(216, 221, 221);
 }
+.hint:hover {
+    background-color: rgb(216, 221, 221);
+}
 .result{
     display: flex;
     justify-content: center
@@ -190,6 +196,8 @@ body {
 .goodAnswer, .badAnswer{
 margin: 10px;
 }
+
+
 
 @media (max-width: 800px) {
     form {

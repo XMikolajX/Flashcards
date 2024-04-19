@@ -166,7 +166,9 @@ body {
 .goodAnswer, .badAnswer{
 margin: 10px;
 }
-
+.repeated {
+  background-color: yellow;
+}
 @keyframes fade-in {
     from {
       opacity: 0;

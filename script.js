@@ -8,7 +8,7 @@ let app = {
   flashcardRemover: document.getElementById("flashcardRemover"),
   flashcardStart: document.getElementById("flashcardStart"),
   flashcards: [],
-  
+  repeatedFlashcard: [],
 };
 /*CREATING ELEMENTS*/
 
@@ -245,6 +245,16 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
               let currentFlashcard = app.flashcards[currentFlashcardIndex]; //assing to currentFlashcard 
 
+              Array.from(app.flashcardSection.children).forEach(flashcardElement => {
+
+                let repeatedQuestionText = flashcardElement.querySelector('.questionSubmitted').textContent;
+                let repeatedAnswerText = flashcardElement.querySelector('.questionAnswer').textContent;
+                if (app.repeatedFlashcard.some(flashcard => flashcard.question === repeatedQuestionText && flashcard.answer === repeatedAnswerText  )){
+                  flashcardElement.classList.add("repeated");
+                  }
+
+              })
+
               BattlefieldFlashcardQuestion.textContent = currentFlashcard.question;
               hint.addEventListener("click",() =>{ 
                 BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
@@ -258,7 +268,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
             
               });
             
-
+              
               currentFlashcardIndex++;
 
           }
@@ -328,5 +338,17 @@ app.flashcardStart.addEventListener("click",  (e) => {
     document.body.removeChild(Battlefield);
     
   })
+
+  app.repeatedFlashcard  = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null);
+
+  Array.from(app.flashcardSection.children).forEach(flashcardElement => {
+    let repeatedQuestionText = flashcardElement.querySelector('.questionSubmitted').textContent;
+    let repeatedAnswerText = flashcardElement.querySelector('.questionAnswer').textContent;
+    if (app.repeatedFlashcard.some(flashcard => flashcard.question === repeatedQuestionText && flashcard.answer === repeatedAnswerText)){
+      flashcardElement.classList.add("repeated");
+      }
+    })
+  localStorage.setItem('repeated flashcards', JSON.stringify(app.repeatedFlashcard)); // convert app.repeatedFlashcard to json obj string, then setItem() save our data
+
 
 });

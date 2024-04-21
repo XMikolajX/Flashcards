@@ -344,8 +344,6 @@ app.flashcardStart.addEventListener("click",  (e) => {
   })
 
 
-  app.repeatedFlashcard  = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null);
 
-  localStorage.setItem('repeated flashcards', JSON.stringify(app.repeatedFlashcard)); // convert app.repeatedFlashcard to json obj string, then setItem() save our data
 
 });

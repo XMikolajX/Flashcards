@@ -121,7 +121,7 @@ app.flashcardMaker.addEventListener("click", (e) => {
       app.flashcards.push({ question: newQuestion.textContent, answer: newAnswer.textContent }); //make new obj in app.flashcards and properties which are used to save in LocalStorage 
 
       localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
-
+      
       newEditButton.addEventListener("click", () => {
 
         app.question.value = newQuestion.textContent;
@@ -302,7 +302,14 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let clickCount1 = 0;
   let clickCount2 = 0;
 
-  KnownFlashcard.addEventListener("click", () =>{ changeFlashcard(); 
+  KnownFlashcard.addEventListener("click", () =>{
+    for (let i = 0; i < app.flashcardSection.children.length; i++) {
+      let newFlashcard = app.flashcardSection.children[i];
+      newFlashcard.classList.add("repeated");
+
+    }
+
+    changeFlashcard(); 
     clickCount1++;
     goodAnswer.textContent = "Know : " +  clickCount1;
 

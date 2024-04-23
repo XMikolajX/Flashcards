@@ -169,6 +169,12 @@ margin: 10px;
 .repeated {
   background-color: yellow;
 }
+.remembered {
+  background-color: rgb(0, 244, 150);
+}
+.notRemembered {
+  background-color: rgb(229, 71, 18);
+}
 @keyframes fade-in {
     from {
       opacity: 0;

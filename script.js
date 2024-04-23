@@ -284,6 +284,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
               choice.removeChild(UnknownFlashcard);
               choice.removeChild(KnownFlashcard);
               choice.removeChild(hint);
+              
+              howManyToRepeat()
             }
 
       }
@@ -294,6 +296,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
           choice.removeChild(UnknownFlashcard);
           choice.removeChild(KnownFlashcard);
           choice.removeChild(hint);
+        
+
       }
 
  
@@ -301,19 +305,31 @@ app.flashcardStart.addEventListener("click",  (e) => {
   
   let clickCount1 = 0;
   let clickCount2 = 0;
-
-  KnownFlashcard.addEventListener("click", () =>{
-    for (let i = 0; i < app.flashcardSection.children.length; i++) {
-      let newFlashcard = app.flashcardSection.children[i];
-      newFlashcard.classList.add("repeated");
-
+  let currentIndex = 0;
+function isItRemembered(className){
+  if (currentIndex < app.flashcardSection.children.length) { // Sprawdzenie, czy nie doszliśmy do końca listy elementów
+    let currentElement = app.flashcardSection.children[currentIndex];
+    currentElement.classList.add(className);
+    currentIndex++; 
+    if (currentIndex === app.flashcardSection.children.length) { 
+      currentIndex = 0;
     }
-
+  }
+}
+function howManyToRepeat(){
+  let remembered = document.querySelectorAll(".remembered").length;
+  let notRemembered = document.querySelectorAll(".notRemembered").length;
+  console.log("Remembered:", remembered);
+  console.log("Not Remembered", notRemembered);
+}
+  KnownFlashcard.addEventListener("click", () =>{
+    isItRemembered("remembered");
     changeFlashcard(); 
     clickCount1++;
     goodAnswer.textContent = "Know : " +  clickCount1;
 
     Battlefield.classList.add('green');
+ 
 
     setTimeout(() => {
       choice.classList.remove('shake');
@@ -321,11 +337,12 @@ app.flashcardStart.addEventListener("click",  (e) => {
     }, 1000);
 
 
-   
   });
 
 
-  UnknownFlashcard.addEventListener("click",() =>{  changeFlashcard();
+  UnknownFlashcard.addEventListener("click",() =>{ 
+    isItRemembered("notRemembered");
+    changeFlashcard( );
     clickCount2++;
     badAnswer.textContent = "Unknow : " + clickCount2;
 
@@ -338,18 +355,16 @@ app.flashcardStart.addEventListener("click",  (e) => {
       Battlefield.classList.remove('red');
     }, 1000);
 
-    
   });
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
   changeFlashcard();
-  
+ 
   BattlefieldCloseButton.addEventListener("click", ()=> {
 
     document.body.removeChild(Battlefield);
     
   })
-
 
 
 

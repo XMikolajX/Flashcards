@@ -285,7 +285,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
               choice.removeChild(KnownFlashcard);
               choice.removeChild(hint);
               
-              howManyToRepeat()
+              // howManyToRepeat()
             }
 
       }
@@ -310,24 +310,34 @@ function isItRemembered(className){
   if (currentIndex < app.flashcardSection.children.length) { // Sprawdzenie, czy nie doszliśmy do końca listy elementów
     let currentElement = app.flashcardSection.children[currentIndex];
     currentElement.classList.add(className);
-    currentIndex++; 
+    
     if (currentIndex === app.flashcardSection.children.length) { 
       currentIndex = 0;
     }
+    currentIndex++; 
+   
+  
+
   }
 }
-function howManyToRepeat(){
-  let remembered = document.querySelectorAll(".remembered").length;
-  let notRemembered = document.querySelectorAll(".notRemembered").length;
-  console.log("Remembered:", remembered);
-  console.log("Not Remembered", notRemembered);
-}
+
+// function howManyToRepeat(){
+//   let remembered = document.querySelectorAll(".remembered").length;
+//   let notRemembered = document.querySelectorAll(".notRemembered").length;
+//   let all = remembered + notRemembered 
+//   console.log("Remembered:", remembered);
+//   console.log("Not Remembered:", notRemembered);
+//   console.log("All:", all);
+
+// }
+
   KnownFlashcard.addEventListener("click", () =>{
     isItRemembered("remembered");
+
     changeFlashcard(); 
+
     clickCount1++;
     goodAnswer.textContent = "Know : " +  clickCount1;
-
     Battlefield.classList.add('green');
  
 
@@ -342,7 +352,9 @@ function howManyToRepeat(){
 
   UnknownFlashcard.addEventListener("click",() =>{ 
     isItRemembered("notRemembered");
-    changeFlashcard( );
+
+    changeFlashcard();
+
     clickCount2++;
     badAnswer.textContent = "Unknow : " + clickCount2;
 

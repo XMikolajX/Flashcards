@@ -306,21 +306,21 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let clickCount1 = 0;
   let clickCount2 = 0;
   let currentIndex = 0;
-function isItRemembered(className){
-  if (currentIndex < app.flashcardSection.children.length) { // Sprawdzenie, czy nie doszliśmy do końca listy elementów
-    let currentElement = app.flashcardSection.children[currentIndex];
-    currentElement.classList.add(className);
-    
-    if (currentIndex === app.flashcardSection.children.length) { 
-      currentIndex = 0;
-    }
-    currentIndex++; 
-   
+  function isItRemembered(className){
+    if (currentIndex < app.flashcardSection.children.length) { 
+      let currentElement = app.flashcardSection.children[currentIndex];
+      
+      currentElement.classList.remove("remembered");
+      currentElement.classList.remove("notRemembered");
+
+      currentElement.classList.add(className); 
   
-
+      if (currentIndex === app.flashcardSection.children.length) { 
+        currentIndex = 0;
+      }
+      currentIndex++; 
+    }
   }
-}
-
 // function howManyToRepeat(){
 //   let remembered = document.querySelectorAll(".remembered").length;
 //   let notRemembered = document.querySelectorAll(".notRemembered").length;

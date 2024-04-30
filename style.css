@@ -175,6 +175,12 @@ margin: 10px;
 .notRemembered {
   background-color: rgb(229, 71, 18);
 }
+.goodAnswerCount{
+  color:green
+}
+.badAnswerCount {
+  color:red
+}
 @keyframes fade-in {
     from {
       opacity: 0;

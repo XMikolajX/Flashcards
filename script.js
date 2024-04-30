@@ -10,7 +10,7 @@ let app = {
   flashcardStart: document.getElementById("flashcardStart"),
   flashcards: [],
   flashcardSection: document.getElementById("flashcards"),
-  repeatedFlashcard: [],
+  repeatedFlashcard: {},
 };
 
 
@@ -32,7 +32,7 @@ function generateFlashcardsFromLocalStorage() {
       let newQuestion = document.createElement("span");
       let newAnswer = document.createElement("span");
       let newEditButton = document.createElement("img");
-
+ 
       
 
       newQuestion.textContent = flashcard.question;
@@ -46,6 +46,7 @@ function generateFlashcardsFromLocalStorage() {
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
+     
 
       //APPEND
 
@@ -97,12 +98,16 @@ app.flashcardMaker.addEventListener("click", (e) => {
     let newQuestion = document.createElement("span");
     let newAnswer = document.createElement("span");
     let newEditButton = document.createElement("img");
-
+    let goodAnswerCount = document.createElement("div");
+    let badAnswerCount = document.createElement("div");
+    
     newQuestion.textContent = app.question.value;
     newAnswer.textContent = app.answer.value;
 
     newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
     newEditButton.alt = "edit button";
+    badAnswerCount.textContent = 0
+    goodAnswerCount.textContent = 0
 
     if (newQuestion.textContent.trim() !== "" && newAnswer.textContent.trim() !== "") {
 
@@ -110,10 +115,14 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
+      goodAnswerCount.classList.add("goodAnswerCount");
+      badAnswerCount.classList.add("badAnswerCount");
 
       newFlashcard.append(newQuestion);
       newFlashcard.append(newAnswer);
       newFlashcard.append(newEditButton);
+      newFlashcard.append(goodAnswerCount);
+      newFlashcard.append(badAnswerCount);
       app.flashcardSection.append(newFlashcard);
 
       // ADD NEW FLASHCARD TO LocalStorage
@@ -208,6 +217,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let goodAnswer = document.createElement("div");
   let badAnswer = document.createElement("div");
 
+
   KnownFlashcard.textContent = "Known";
   UnknownFlashcard.textContent = "Unknown"
   hint.textContent = "Hint"
@@ -227,6 +237,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
   result.classList.add("result");
   goodAnswer.classList.add("goodAnswer");
   badAnswer.classList.add("badAnswer");
+
 
   //ADDING ELEMENTS
   choice.append(UnknownFlashcard);
@@ -315,6 +326,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
       currentElement.classList.add(className); 
   
+    
+      
+
       if (currentIndex === app.flashcardSection.children.length) { 
         currentIndex = 0;
       }
@@ -337,9 +351,12 @@ app.flashcardStart.addEventListener("click",  (e) => {
     changeFlashcard(); 
 
     clickCount1++;
+   
     goodAnswer.textContent = "Know : " +  clickCount1;
+
     Battlefield.classList.add('green');
- 
+    
+  
 
     setTimeout(() => {
       choice.classList.remove('shake');
@@ -361,6 +378,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
     choice.classList.add('shake');
     
     Battlefield.classList.add('red');
+
+    
 
     setTimeout(() => {
       choice.classList.remove('shake');

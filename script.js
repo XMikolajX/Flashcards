@@ -98,16 +98,14 @@ app.flashcardMaker.addEventListener("click", (e) => {
     let newQuestion = document.createElement("span");
     let newAnswer = document.createElement("span");
     let newEditButton = document.createElement("img");
-    let goodAnswerCount = document.createElement("div");
-    let badAnswerCount = document.createElement("div");
-    
+
+
     newQuestion.textContent = app.question.value;
     newAnswer.textContent = app.answer.value;
 
     newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
     newEditButton.alt = "edit button";
-    badAnswerCount.textContent = 0
-    goodAnswerCount.textContent = 0
+   
 
     if (newQuestion.textContent.trim() !== "" && newAnswer.textContent.trim() !== "") {
 
@@ -115,14 +113,12 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
-      goodAnswerCount.classList.add("goodAnswerCount");
-      badAnswerCount.classList.add("badAnswerCount");
+     
 
       newFlashcard.append(newQuestion);
       newFlashcard.append(newAnswer);
       newFlashcard.append(newEditButton);
-      newFlashcard.append(goodAnswerCount);
-      newFlashcard.append(badAnswerCount);
+    
       app.flashcardSection.append(newFlashcard);
 
       // ADD NEW FLASHCARD TO LocalStorage
@@ -317,22 +313,35 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let clickCount1 = 0;
   let clickCount2 = 0;
   let currentIndex = 0;
-  function isItRemembered(className){
+  let goodAnswerCount = 0;
+  let badAnswerCount = 0 ;
+  function isItRemembered(className, increaseCount){
     if (currentIndex < app.flashcardSection.children.length) { 
-      let currentElement = app.flashcardSection.children[currentIndex];
       
+      let goodAnswerCountText = document.createElement("div");
+      let badAnswerCountText = document.createElement("div");
+      let currentElement = app.flashcardSection.children[currentIndex];
+
+      goodAnswerCountText.classList.add("goodAnswerCount");
+      badAnswerCountText.classList.add("badAnswerCount");
       currentElement.classList.remove("remembered");
       currentElement.classList.remove("notRemembered");
 
       currentElement.classList.add(className); 
   
-    
       
+      currentElement.appendChild(goodAnswerCountText);
+      currentElement.appendChild(badAnswerCountText);
 
       if (currentIndex === app.flashcardSection.children.length) { 
         currentIndex = 0;
       }
+  
       currentIndex++; 
+      increaseCount++;
+      
+      goodAnswerCountText.textContent =  increaseCount;
+
     }
   }
 // function howManyToRepeat(){
@@ -346,7 +355,10 @@ app.flashcardStart.addEventListener("click",  (e) => {
 // }
 
   KnownFlashcard.addEventListener("click", () =>{
-    isItRemembered("remembered");
+    isItRemembered("remembered", goodAnswerCount);
+
+    
+  
 
     changeFlashcard(); 
 
@@ -368,7 +380,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
 
   UnknownFlashcard.addEventListener("click",() =>{ 
-    isItRemembered("notRemembered");
+    isItRemembered("notRemembered",badAnswerCount);
+
+    
 
     changeFlashcard();
 

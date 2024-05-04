@@ -13,10 +13,6 @@ let app = {
   repeatedFlashcard: {},
 };
 
-
-
-
-
 function generateFlashcardsFromLocalStorage() {
   let storedFlashcards = localStorage.getItem('flashcards');  // Take from localStorage item as key "flashcards" and assing to variable
 
@@ -32,7 +28,8 @@ function generateFlashcardsFromLocalStorage() {
       let newQuestion = document.createElement("span");
       let newAnswer = document.createElement("span");
       let newEditButton = document.createElement("img");
- 
+      let counterElement = document.createElement("div");
+      let counter = 0;
       
 
       newQuestion.textContent = flashcard.question;
@@ -40,6 +37,7 @@ function generateFlashcardsFromLocalStorage() {
       newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
       newEditButton.alt = "edit button";
 
+      counterElement.textContent  = counter
       // ADD CLASS
 
       newFlashcard.classList.add("flashcardSubmitted");
@@ -98,11 +96,14 @@ app.flashcardMaker.addEventListener("click", (e) => {
     let newQuestion = document.createElement("span");
     let newAnswer = document.createElement("span");
     let newEditButton = document.createElement("img");
-
+    let counterElement = document.createElement("div");
+    let counter = 0;
 
     newQuestion.textContent = app.question.value;
     newAnswer.textContent = app.answer.value;
-
+    // KnownFlashcard.addEventListener(counter)
+    counterElement.textContent  = counter
+   
     newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
     newEditButton.alt = "edit button";
    
@@ -118,7 +119,7 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newFlashcard.append(newQuestion);
       newFlashcard.append(newAnswer);
       newFlashcard.append(newEditButton);
-    
+      newFlashcard.append(counterElement);
       app.flashcardSection.append(newFlashcard);
 
       // ADD NEW FLASHCARD TO LocalStorage
@@ -313,34 +314,25 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let clickCount1 = 0;
   let clickCount2 = 0;
   let currentIndex = 0;
-  let goodAnswerCount = 0;
-  let badAnswerCount = 0 ;
-  function isItRemembered(className, increaseCount){
+
+  function isItRemembered(className){
     if (currentIndex < app.flashcardSection.children.length) { 
       
-      let goodAnswerCountText = document.createElement("div");
-      let badAnswerCountText = document.createElement("div");
+  
       let currentElement = app.flashcardSection.children[currentIndex];
 
-      goodAnswerCountText.classList.add("goodAnswerCount");
-      badAnswerCountText.classList.add("badAnswerCount");
+  
       currentElement.classList.remove("remembered");
       currentElement.classList.remove("notRemembered");
-
-      currentElement.classList.add(className); 
-  
       
-      currentElement.appendChild(goodAnswerCountText);
-      currentElement.appendChild(badAnswerCountText);
+      currentElement.classList.add(className); 
 
       if (currentIndex === app.flashcardSection.children.length) { 
         currentIndex = 0;
       }
   
       currentIndex++; 
-      increaseCount++;
       
-      goodAnswerCountText.textContent =  increaseCount;
 
     }
   }
@@ -355,21 +347,20 @@ app.flashcardStart.addEventListener("click",  (e) => {
 // }
 
   KnownFlashcard.addEventListener("click", () =>{
-    isItRemembered("remembered", goodAnswerCount);
-
-    
-  
-
+    isItRemembered("remembered");
+   
     changeFlashcard(); 
 
+    // function transfer(arg){
+    //   return arg++
+    // }
+    // transfer(arg)
     clickCount1++;
    
     goodAnswer.textContent = "Know : " +  clickCount1;
 
     Battlefield.classList.add('green');
-    
-  
-
+   
     setTimeout(() => {
       choice.classList.remove('shake');
       Battlefield.classList.remove('green');
@@ -380,9 +371,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
 
   UnknownFlashcard.addEventListener("click",() =>{ 
-    isItRemembered("notRemembered",badAnswerCount);
-
-    
+    isItRemembered("notRemembered");
 
     changeFlashcard();
 
@@ -392,8 +381,6 @@ app.flashcardStart.addEventListener("click",  (e) => {
     choice.classList.add('shake');
     
     Battlefield.classList.add('red');
-
-    
 
     setTimeout(() => {
       choice.classList.remove('shake');
@@ -410,7 +397,5 @@ app.flashcardStart.addEventListener("click",  (e) => {
     document.body.removeChild(Battlefield);
     
   })
-
-
 
 });

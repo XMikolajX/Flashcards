@@ -28,16 +28,13 @@ function generateFlashcardsFromLocalStorage() {
       let newQuestion = document.createElement("span");
       let newAnswer = document.createElement("span");
       let newEditButton = document.createElement("img");
-      let counterElement = document.createElement("div");
-      let counter = 0;
+    
       
-
       newQuestion.textContent = flashcard.question;
       newAnswer.textContent = flashcard.answer;
       newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
       newEditButton.alt = "edit button";
 
-      counterElement.textContent  = counter
       // ADD CLASS
 
       newFlashcard.classList.add("flashcardSubmitted");
@@ -96,14 +93,12 @@ app.flashcardMaker.addEventListener("click", (e) => {
     let newQuestion = document.createElement("span");
     let newAnswer = document.createElement("span");
     let newEditButton = document.createElement("img");
-    let counterElement = document.createElement("div");
-    let counter = 0;
 
     newQuestion.textContent = app.question.value;
     newAnswer.textContent = app.answer.value;
-    // KnownFlashcard.addEventListener(counter)
-    counterElement.textContent  = counter
    
+    
+
     newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
     newEditButton.alt = "edit button";
    
@@ -119,7 +114,6 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newFlashcard.append(newQuestion);
       newFlashcard.append(newAnswer);
       newFlashcard.append(newEditButton);
-      newFlashcard.append(counterElement);
       app.flashcardSection.append(newFlashcard);
 
       // ADD NEW FLASHCARD TO LocalStorage
@@ -315,27 +309,63 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let clickCount2 = 0;
   let currentIndex = 0;
 
-  function isItRemembered(className){
+ 
+  function isItRemembered(className) {
     if (currentIndex < app.flashcardSection.children.length) { 
       
-  
-      let currentElement = app.flashcardSection.children[currentIndex];
-
-  
-      currentElement.classList.remove("remembered");
-      currentElement.classList.remove("notRemembered");
+        let currentElement = app.flashcardSection.children[currentIndex];
       
-      currentElement.classList.add(className); 
+        // Funkcja aktualizująca licznik odpowiedzi
+        function updateCounter(currentElement, counterClassName) {
+            let counterNumber = currentElement.querySelector("." + counterClassName); // Sprawdź, czy istnieje już licznik dla tej klasy
+        
+            // Jeśli nie ma, utwórz nowy licznik
+            if (!counterNumber) {
+                counterNumber = document.createElement("div");
+                counterNumber.className = counterClassName;
+                currentElement.appendChild(counterNumber);
+            }
+        
+            // Pobierz wartość licznika
+            let counter = parseInt(counterNumber.textContent) || 0;
+        
+            // Zwiększ wartość licznika o 1
+            counter++;
+        
+            // Aktualizuj tekst w liczniku
+            counterNumber.textContent = counter;
+        }
+        
+        // Funkcja do obsługi poprawnych odpowiedzi
+        function updateCorrectCounter(currentElement) {
+            updateCounter(currentElement, "counterNumberCorrectAnswers");
+        }
+        
+        // Funkcja do obsługi niepoprawnych odpowiedzi
+        function updateWrongCounter(currentElement) {
+            updateCounter(currentElement, "counterNumberWrongAnswers");
+        }
 
-      if (currentIndex === app.flashcardSection.children.length) { 
-        currentIndex = 0;
-      }
-  
-      currentIndex++; 
+        // Aktualizacja odpowiedniego licznika w zależności od klasy
+        if (className === "remembered") {
+            updateCorrectCounter(currentElement);
+        } else if (className === "notRemembered") {
+            updateWrongCounter(currentElement);
+        }
       
+        currentElement.classList.remove("remembered");
+        currentElement.classList.remove("notRemembered");
+        
+        currentElement.classList.add(className); 
 
+        if (currentIndex === app.flashcardSection.children.length) { 
+            currentIndex = 0;
+        }
+    
+        currentIndex++; 
+      
     }
-  }
+}
 // function howManyToRepeat(){
 //   let remembered = document.querySelectorAll(".remembered").length;
 //   let notRemembered = document.querySelectorAll(".notRemembered").length;
@@ -348,7 +378,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   KnownFlashcard.addEventListener("click", () =>{
     isItRemembered("remembered");
-   
+  
+
     changeFlashcard(); 
 
     // function transfer(arg){
@@ -372,6 +403,7 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   UnknownFlashcard.addEventListener("click",() =>{ 
     isItRemembered("notRemembered");
+
 
     changeFlashcard();
 

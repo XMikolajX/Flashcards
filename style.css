@@ -175,10 +175,10 @@ margin: 10px;
 .notRemembered {
   background-color: rgb(229, 71, 18);
 }
-.goodAnswerCount{
+.counterNumberCorrectAnswers{
   color:green
 }
-.badAnswerCount {
+.counterNumberWrongAnswers {
   color:red
 }
 @keyframes fade-in {

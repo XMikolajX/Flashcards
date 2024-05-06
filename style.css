@@ -76,9 +76,8 @@ body {
     position: absolute;
     top:0;
     right: 0;
-    width:3vw;
+    width:30px;
     cursor: pointer;
-    height: 7vh;
 }
 .closeButton {
     top:0;
@@ -179,7 +178,10 @@ margin: 10px;
   color:green
 }
 .counterNumberWrongAnswers {
-  color:red
+  color:rgb(198, 12, 12)
+}
+.counterNumberContainer {
+  display: flex;
 }
 @keyframes fade-in {
     from {

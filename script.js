@@ -315,46 +315,49 @@ app.flashcardStart.addEventListener("click",  (e) => {
       
         let currentElement = app.flashcardSection.children[currentIndex];
       
-        // Funkcja aktualizująca licznik odpowiedzi
+        // Function that updates the response counter
         function updateCounter(currentElement, counterClassName) {
             let counterNumber = currentElement.querySelector("." + counterClassName); // Sprawdź, czy istnieje już licznik dla tej klasy
-        
-            // Jeśli nie ma, utwórz nowy licznik
+
+            // if is not created, create a new counter
             if (!counterNumber) {
+           
                 counterNumber = document.createElement("div");
                 counterNumber.className = counterClassName;
                 currentElement.appendChild(counterNumber);
+
             }
         
-            // Pobierz wartość licznika
+            // Get the counter value
             let counter = parseInt(counterNumber.textContent) || 0;
         
-            // Zwiększ wartość licznika o 1
+            // Increase the counter value by 1
             counter++;
         
-            // Aktualizuj tekst w liczniku
+            // Update text in counter
             counterNumber.textContent = counter;
+            
         }
         
-        // Funkcja do obsługi poprawnych odpowiedzi
+        // Function to handle correct answers
         function updateCorrectCounter(currentElement) {
             updateCounter(currentElement, "counterNumberCorrectAnswers");
         }
         
-        // Funkcja do obsługi niepoprawnych odpowiedzi
+        // Function to handle wrong answers
         function updateWrongCounter(currentElement) {
             updateCounter(currentElement, "counterNumberWrongAnswers");
         }
 
-        // Aktualizacja odpowiedniego licznika w zależności od klasy
+      
+        //Update the appropriate counter depending on the class
         if (className === "remembered") {
             updateCorrectCounter(currentElement);
         } else if (className === "notRemembered") {
             updateWrongCounter(currentElement);
         }
       
-        currentElement.classList.remove("remembered");
-        currentElement.classList.remove("notRemembered");
+    
         
         currentElement.classList.add(className); 
 
@@ -363,18 +366,16 @@ app.flashcardStart.addEventListener("click",  (e) => {
         }
     
         currentIndex++; 
-      
+        // Pobieramy tablicę klas elementu
+        let classList = currentElement.classList
+
+        let filteredClassNamaes = Array.from(classList).filter(className => className != "flashcardSubmitted")
+
+        localStorage.setItem("classNames", JSON.stringify(filteredClassNamaes))
+        
     }
 }
-// function howManyToRepeat(){
-//   let remembered = document.querySelectorAll(".remembered").length;
-//   let notRemembered = document.querySelectorAll(".notRemembered").length;
-//   let all = remembered + notRemembered 
-//   console.log("Remembered:", remembered);
-//   console.log("Not Remembered:", notRemembered);
-//   console.log("All:", all);
 
-// }
 
   KnownFlashcard.addEventListener("click", () =>{
     isItRemembered("remembered");
@@ -382,10 +383,6 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
     changeFlashcard(); 
 
-    // function transfer(arg){
-    //   return arg++
-    // }
-    // transfer(arg)
     clickCount1++;
    
     goodAnswer.textContent = "Know : " +  clickCount1;

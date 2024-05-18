@@ -11,6 +11,7 @@ let app = {
   flashcards: [],
   flashcardSection: document.getElementById("flashcards"),
   repeatedFlashcard: {},
+  flashcardId: {}, // Dodanie obiektu flashcardId
 };
 
 function generateFlashcardsFromLocalStorage() {
@@ -314,7 +315,11 @@ app.flashcardStart.addEventListener("click",  (e) => {
     if (currentIndex < app.flashcardSection.children.length) { 
       
         let currentElement = app.flashcardSection.children[currentIndex];
-      
+        let question = currentElement.querySelector(".questionSubmitted").textContent;
+        let answer = currentElement.querySelector(".questionAnswer").textContent;
+        
+        // Update the flashcardId object with the information about whether the flashcard is remembered or not
+        updateFlashcardId(question, answer, className === "remembered");
         // Function that updates the response counter
         function updateCounter(currentElement, counterClassName) {
             let counterNumber = currentElement.querySelector("." + counterClassName); // Sprawdź, czy istnieje już licznik dla tej klasy
@@ -375,7 +380,17 @@ app.flashcardStart.addEventListener("click",  (e) => {
         
     }
 }
-
+function updateFlashcardId(question, answer, remembered) {
+  const flashcardKey = `${question}_${answer}`; // Klucz identyfikujący fiszkę na podstawie pytania i odpowiedzi
+  if (!app.flashcardId[flashcardKey]) {
+      app.flashcardId[flashcardKey] = { known: 0, unknown: 0 }; // Jeśli nie istnieje jeszcze wpis dla tej fiszki, tworzymy nowy
+  }
+  if (remembered) {
+      app.flashcardId[flashcardKey].known++; // Inkrementacja liczby znanych fiszek
+  } else {
+      app.flashcardId[flashcardKey].unknown++; // Inkrementacja liczby nieznanych fiszek
+  }
+}
 
   KnownFlashcard.addEventListener("click", () =>{
     isItRemembered("remembered");

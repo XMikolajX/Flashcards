@@ -318,6 +318,8 @@ app.flashcardStart.addEventListener("click",  (e) => {
         let question = currentElement.querySelector(".questionSubmitted").textContent;
         let answer = currentElement.querySelector(".questionAnswer").textContent;
         
+
+        
         // Update the flashcardId object with the information about whether the flashcard is remembered or not
         updateFlashcardId(question, answer, className === "remembered");
         // Function that updates the response counter

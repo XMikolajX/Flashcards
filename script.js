@@ -1,6 +1,5 @@
 "use strict";
 
-
 let app = {
 /*CREATING ELEMENTS*/
   question: document.getElementById("question"),
@@ -14,37 +13,79 @@ let app = {
   flashcardId: {}, // Dodanie obiektu flashcardId
 };
 
+function loadFlashcardIdFromLocalStorage() {
+  const storedFlashcardId = localStorage.getItem('flashcardId');
+  if (storedFlashcardId) {
+    app.flashcardId = JSON.parse(storedFlashcardId);
+  }
+}
+
+loadFlashcardIdFromLocalStorage(); // Wczytaj dane z localStorage
+
+function updateCounter(element, counterClassName, count) {
+    let counterNumber = element.querySelector("." + counterClassName);
+    if (!counterNumber) {
+        counterNumber = document.createElement("div");
+        counterNumber.className = counterClassName;
+        element.appendChild(counterNumber);
+    }
+    counterNumber.textContent = count;
+}
+
+function updateCorrectCounter(element, count) {
+  updateCounter(element, "counterNumberCorrectAnswers", count);
+}
+
+function updateWrongCounter(element, count) {
+  updateCounter(element, "counterNumberWrongAnswers", count);
+}
+
+function updateFlashcardId(question, answer, remembered) {
+  const flashcardKey = `${question}_${answer}`; // Klucz identyfikujący fiszkę na podstawie pytania i odpowiedzi
+  if (!app.flashcardId[flashcardKey]) {
+    app.flashcardId[flashcardKey] = { known: 0, unknown: 0 }; // Jeśli nie istnieje jeszcze wpis dla tej fiszki, tworzymy nowy
+  }
+  if (remembered) {
+    app.flashcardId[flashcardKey].known++; // Inkrementacja liczby znanych fiszek
+  } else {
+    app.flashcardId[flashcardKey].unknown++; // Inkrementacja liczby nieznanych fiszek
+  }
+  localStorage.setItem('flashcardId', JSON.stringify(app.flashcardId)); // Zapisz dane do localStorage
+}
+
 function generateFlashcardsFromLocalStorage() {
-  let storedFlashcards = localStorage.getItem('flashcards');  // Take from localStorage item as key "flashcards" and assing to variable
+  let storedFlashcards = localStorage.getItem('flashcards');
 
-  if (storedFlashcards) { //if exists
-    
-    app.flashcards = JSON.parse(storedFlashcards);//assing existed flashcard to app.flashcards to prevent bug with reload and deleting all array properties
-    let parsedFlashcards = JSON.parse(storedFlashcards); //Convert to OBJ from string
-    parsedFlashcards.forEach(flashcard => { //for every element of this array...
-
-      // CREATE ELEMENT
-
+  if (storedFlashcards) {
+    app.flashcards = JSON.parse(storedFlashcards);
+    let parsedFlashcards = JSON.parse(storedFlashcards);
+    parsedFlashcards.forEach(flashcard => {
       let newFlashcard = document.createElement("div");
       let newQuestion = document.createElement("span");
       let newAnswer = document.createElement("span");
       let newEditButton = document.createElement("img");
-    
-      
+
       newQuestion.textContent = flashcard.question;
       newAnswer.textContent = flashcard.answer;
       newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
       newEditButton.alt = "edit button";
 
-      // ADD CLASS
-
       newFlashcard.classList.add("flashcardSubmitted");
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
-     
 
-      //APPEND
+      const flashcardKey = `${flashcard.question}_${flashcard.answer}`;
+      if (app.flashcardId[flashcardKey]) {
+        if (app.flashcardId[flashcardKey].known > app.flashcardId[flashcardKey].unknown) {
+          newFlashcard.classList.add("remembered");
+        } else {
+          newFlashcard.classList.add("notRemembered");
+        }
+
+        updateCorrectCounter(newFlashcard, app.flashcardId[flashcardKey].known);
+        updateWrongCounter(newFlashcard, app.flashcardId[flashcardKey].unknown);
+      }
 
       newFlashcard.appendChild(newQuestion);
       newFlashcard.appendChild(newAnswer);
@@ -52,36 +93,25 @@ function generateFlashcardsFromLocalStorage() {
       app.flashcardSection.appendChild(newFlashcard);
 
       newEditButton.addEventListener("click", (e) => {
-
         app.question.value = newQuestion.textContent;
         app.answer.value = newAnswer.textContent;
 
         newQuestion.textContent = null;
         newAnswer.textContent = null;
-
         app.flashcardSection.removeChild(newFlashcard);
-      
 
         app.flashcards.forEach((flashcard, index) => {
           if (flashcard.question === app.question.value && flashcard.answer === app.answer.value) {
-
-              app.flashcards.splice(index, 1);
-
+            app.flashcards.splice(index, 1);
           }
-      }); //remove flashcard from array
-  
-        // Update data  in LocalStorage after remove flashcard
-        app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null); //assing every flashcard from array flashcards to app.flashcards  which is not equel to given condition
-        
-        localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); // convert app.flashcards to json obj string, then setItem() save our data
+        });
 
+        app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null);
+        localStorage.setItem('flashcards', JSON.stringify(app.flashcards));
       });
-
     });
-
-  };
-
-};
+  }
+}
 
 generateFlashcardsFromLocalStorage();
 
@@ -98,11 +128,8 @@ app.flashcardMaker.addEventListener("click", (e) => {
     newQuestion.textContent = app.question.value;
     newAnswer.textContent = app.answer.value;
    
-    
-
     newEditButton.src = "img/edit_FILL0_wght400_GRAD0_opsz48.svg";
     newEditButton.alt = "edit button";
-   
 
     if (newQuestion.textContent.trim() !== "" && newAnswer.textContent.trim() !== "") {
 
@@ -110,7 +137,6 @@ app.flashcardMaker.addEventListener("click", (e) => {
       newQuestion.classList.add("questionSubmitted");
       newAnswer.classList.add("questionAnswer");
       newEditButton.classList.add("editButton");
-     
 
       newFlashcard.append(newQuestion);
       newFlashcard.append(newAnswer);
@@ -131,68 +157,49 @@ app.flashcardMaker.addEventListener("click", (e) => {
         newQuestion.textContent = null;
         newAnswer.textContent = null;
 
+        app.flashcardSection.removeChild(newFlashcard);
 
-          app.flashcardSection.removeChild(newFlashcard);
+        // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
 
-          // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
+        app.flashcards.forEach((flashcard, index) => {
 
-          app.flashcards.forEach((flashcard, index) => {
+          if ((flashcard.question === app.question.value) && (flashcard.answer === app.answer.value)) {
+            app.flashcards.splice(index, 1);
+          }
+        }); //remove flashcard from array
 
-            if ((flashcard.question === app.question.value) && (flashcard.answer === app.answer.value)) {
-              
-                app.flashcards.splice(index, 1);
-            }
-          });//remove flashcard from array
-    
+        app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== null && flashcard.answer !== null); //make new obj in app.flashcards and properties which are used to save in LocalStorage 
 
-          app.flashcards = app.flashcards.filter(flashcard => flashcard.question !== null && flashcard.answer !== null);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
-
-          localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
+        localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
       });
 
+    } else {
+      alert("Complete the fields");
     }
-      else {
-
-        alert("Complete the fields");
-
-      }
-  }
-   else {
-
-    console.log(" Flashcard limit reached");
-
+  } else {
+    console.log("Flashcard limit reached");
   }
 });
 
-app.flashcardRemover.addEventListener("click", (e)=> {
-  
-
+app.flashcardRemover.addEventListener("click", (e) => {
   e.preventDefault(); // PREVENT DEFAULT BEHAVIOR (PAGE RELOAD)
 
-  
-   if(app.flashcardSection.children.length > 0){
-
+  if (app.flashcardSection.children.length > 0) {
     let lastFlashcard = app.flashcardSection.lastElementChild;
-    
+
     app.flashcardSection.removeChild(lastFlashcard);
 
     app.flashcards.pop();
-    
-    app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null);  //make new obj in app.flashcards and properties which are used to save in LocalStorage 
-    
+
+    app.flashcards = app.flashcards.filter(flash => flash.question !== null && flash.answer !== null); //make new obj in app.flashcards and properties which are used to save in LocalStorage 
+
     localStorage.setItem('flashcards', JSON.stringify(app.flashcards)); //convert app.flashcards to json obj string, then setItem() save our data
-   }
-
-   else {
-
+  } else {
     console.log("No more flashcards to remove");
-
-   };
-
+  }
 });
 
-app.flashcardStart.addEventListener("click",  (e) => {
-
+app.flashcardStart.addEventListener("click", (e) => {
   e.preventDefault();
 
   //CREATING ELEMENTS
@@ -209,10 +216,9 @@ app.flashcardStart.addEventListener("click",  (e) => {
   let goodAnswer = document.createElement("div");
   let badAnswer = document.createElement("div");
 
-
   KnownFlashcard.textContent = "Known";
-  UnknownFlashcard.textContent = "Unknown"
-  hint.textContent = "Hint"
+  UnknownFlashcard.textContent = "Unknown";
+  hint.textContent = "Hint";
   BattlefieldCloseButton.src = "img/close_FILL0_wght400_GRAD0_opsz48.svg";
   BattlefieldCloseButton.alt = "close button";
 
@@ -230,7 +236,6 @@ app.flashcardStart.addEventListener("click",  (e) => {
   goodAnswer.classList.add("goodAnswer");
   badAnswer.classList.add("badAnswer");
 
-
   //ADDING ELEMENTS
   choice.append(UnknownFlashcard);
   choice.append(hint);
@@ -243,205 +248,105 @@ app.flashcardStart.addEventListener("click",  (e) => {
 
   document.body.appendChild(Battlefield);
 
-
- 
   let currentFlashcardIndex = 0;
 
   function changeFlashcard() {
+    if (app.flashcards.length > 0) { //if is greater than  0
+      if (currentFlashcardIndex < app.flashcards.length) {  //if  app.flashcards.length is greater than currentFlashcardIndex 
+        let currentFlashcard = app.flashcards[currentFlashcardIndex]; //assing to currentFlashcard 
 
-      if (app.flashcards.length > 0) { //if is greater than  0
+        BattlefieldFlashcardQuestion.textContent = currentFlashcard.question;
 
-          if (currentFlashcardIndex < app.flashcards.length) {  //if  app.flashcards.length is greater than currentFlashcardIndex 
+        hint.addEventListener("click", () => { 
+          BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
 
-              let currentFlashcard = app.flashcards[currentFlashcardIndex]; //assing to currentFlashcard 
-
-              BattlefieldFlashcardQuestion.textContent = currentFlashcard.question;
-
-              hint.addEventListener("click",() =>{ 
-
-                BattlefieldFlashcardAnswer.textContent = currentFlashcard.answer;
-
-                if (BattlefieldFlashcardAnswer.textContent === currentFlashcard.answer) {
-
-                  setTimeout(() => {
-                      BattlefieldFlashcardAnswer.textContent = '';
-                  }, 400); 
-
-                }
-            
-              });
-            
-              
-              currentFlashcardIndex++;
-
+          if (BattlefieldFlashcardAnswer.textContent === currentFlashcard.answer) {
+            setTimeout(() => {
+              BattlefieldFlashcardAnswer.textContent = '';
+            }, 400); 
           }
-            else {
-
-              BattlefieldFlashcard.textContent = "There are no more flashcards";
-
-
-              result.append(goodAnswer, badAnswer);
-
-              BattlefieldFlashcard.append(result);
-
-              choice.removeChild(UnknownFlashcard);
-              choice.removeChild(KnownFlashcard);
-              choice.removeChild(hint);
-              
-              // howManyToRepeat()
-            }
-
-      }
-
-      else {
-
-          BattlefieldFlashcard.textContent = "There are no flashcards created";
-          choice.removeChild(UnknownFlashcard);
-          choice.removeChild(KnownFlashcard);
-          choice.removeChild(hint);
+        });
         
+        currentFlashcardIndex++;
+      } else {
+        BattlefieldFlashcard.textContent = "There are no more flashcards";
 
+        result.append(goodAnswer, badAnswer);
+        BattlefieldFlashcard.append(result);
+
+        choice.removeChild(UnknownFlashcard);
+        choice.removeChild(KnownFlashcard);
+        choice.removeChild(hint);
       }
-
- 
+    } else {
+      BattlefieldFlashcard.textContent = "There are no flashcards created";
+      choice.removeChild(UnknownFlashcard);
+      choice.removeChild(KnownFlashcard);
+      choice.removeChild(hint);
+    }
   }
-  
+
   let clickCount1 = 0;
   let clickCount2 = 0;
   let currentIndex = 0;
 
- 
   function isItRemembered(className) {
-    if (currentIndex < app.flashcardSection.children.length) { 
+    if (currentIndex < app.flashcardSection.children.length) {
+      let currentElement = app.flashcardSection.children[currentIndex];
+      let question = currentElement.querySelector(".questionSubmitted").textContent;
+      let answer = currentElement.querySelector(".questionAnswer").textContent;
+      const flashcardKey = `${question}_${answer}`;
       
-        let currentElement = app.flashcardSection.children[currentIndex];
-        let question = currentElement.querySelector(".questionSubmitted").textContent;
-        let answer = currentElement.querySelector(".questionAnswer").textContent;
-        
-
-        
-        // Update the flashcardId object with the information about whether the flashcard is remembered or not
-        updateFlashcardId(question, answer, className === "remembered");
-        // Function that updates the response counter
-        function updateCounter(currentElement, counterClassName) {
-            let counterNumber = currentElement.querySelector("." + counterClassName); // Sprawdź, czy istnieje już licznik dla tej klasy
-
-            // if is not created, create a new counter
-            if (!counterNumber) {
-           
-                counterNumber = document.createElement("div");
-                counterNumber.className = counterClassName;
-                currentElement.appendChild(counterNumber);
-
-            }
-        
-            // Get the counter value
-            let counter = parseInt(counterNumber.textContent) || 0;
-        
-            // Increase the counter value by 1
-            counter++;
-        
-            // Update text in counter
-            counterNumber.textContent = counter;
-            
-        }
-        
-        // Function to handle correct answers
-        function updateCorrectCounter(currentElement) {
-            updateCounter(currentElement, "counterNumberCorrectAnswers");
-        }
-        
-        // Function to handle wrong answers
-        function updateWrongCounter(currentElement) {
-            updateCounter(currentElement, "counterNumberWrongAnswers");
-        }
-
+      updateFlashcardId(question, answer, className === "remembered");
       
-        //Update the appropriate counter depending on the class
-        if (className === "remembered") {
-            updateCorrectCounter(currentElement);
-        } else if (className === "notRemembered") {
-            updateWrongCounter(currentElement);
-        }
+      if (app.flashcardId[flashcardKey]) {
+        updateCorrectCounter(currentElement, app.flashcardId[flashcardKey].known);
+        updateWrongCounter(currentElement, app.flashcardId[flashcardKey].unknown);
+      }
       
-    
-        
-        currentElement.classList.add(className); 
-
-        if (currentIndex === app.flashcardSection.children.length) { 
-            currentIndex = 0;
-        }
-    
-        currentIndex++; 
-        // Pobieramy tablicę klas elementu
-        let classList = currentElement.classList
-
-        let filteredClassNamaes = Array.from(classList).filter(className => className != "flashcardSubmitted")
-
-        localStorage.setItem("classNames", JSON.stringify(filteredClassNamaes))
-        
-    }
-}
-function updateFlashcardId(question, answer, remembered) {
-  const flashcardKey = `${question}_${answer}`; // Klucz identyfikujący fiszkę na podstawie pytania i odpowiedzi
-  if (!app.flashcardId[flashcardKey]) {
-      app.flashcardId[flashcardKey] = { known: 0, unknown: 0 }; // Jeśli nie istnieje jeszcze wpis dla tej fiszki, tworzymy nowy
-  }
-  if (remembered) {
-      app.flashcardId[flashcardKey].known++; // Inkrementacja liczby znanych fiszek
-  } else {
-      app.flashcardId[flashcardKey].unknown++; // Inkrementacja liczby nieznanych fiszek
-  }
-}
-
-  KnownFlashcard.addEventListener("click", () =>{
-    isItRemembered("remembered");
+      currentElement.classList.add(className); 
   
+      if (currentIndex === app.flashcardSection.children.length) { 
+        currentIndex = 0;
+      }
+      
+      currentIndex++;
+      
+      let classList = currentElement.classList;
+      let filteredClassNames = Array.from(classList).filter(className => className != "flashcardSubmitted");
+      localStorage.setItem("classNames", JSON.stringify(filteredClassNames));
+    }
+  }
 
+  KnownFlashcard.addEventListener("click", () => {
+    isItRemembered("remembered");
     changeFlashcard(); 
-
     clickCount1++;
-   
     goodAnswer.textContent = "Know : " +  clickCount1;
-
     Battlefield.classList.add('green');
-   
     setTimeout(() => {
       choice.classList.remove('shake');
       Battlefield.classList.remove('green');
     }, 1000);
-
-
   });
 
-
-  UnknownFlashcard.addEventListener("click",() =>{ 
+  UnknownFlashcard.addEventListener("click", () => { 
     isItRemembered("notRemembered");
-
-
     changeFlashcard();
-
     clickCount2++;
     badAnswer.textContent = "Unknow : " + clickCount2;
-
     choice.classList.add('shake');
-    
     Battlefield.classList.add('red');
-
     setTimeout(() => {
       choice.classList.remove('shake');
       Battlefield.classList.remove('red');
     }, 1000);
-
   });
 
   //SHOW FIRST FLASHCARD IN BattlefieldFlashcard
   changeFlashcard();
  
-  BattlefieldCloseButton.addEventListener("click", ()=> {
-
+  BattlefieldCloseButton.addEventListener("click", () => {
     document.body.removeChild(Battlefield);
-    
-  })
-
+  });
 });

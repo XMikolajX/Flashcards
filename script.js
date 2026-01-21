@@ -157,7 +157,67 @@ app.flashcardMaker.addEventListener("click", (e) => {
         newQuestion.textContent = null;
         newAnswer.textContent = null;
 
+<<<<<<< HEAD
         app.flashcardSection.removeChild(newFlashcard);
+=======
+            imgCloseBtn.addEventListener("click", () => {
+                createdFlashcards.removeChild(newFlashcardContainer); //after click on imgCloseBtn remove  newFlashcardContainer
+             
+              });
+           imgEditBtn.addEventListener("click", () => {
+              titleFlashcard.value =   newFlashcardTitle.textContent;
+              descriptionFlashcard.value = newFlashcardDescription.textContent; 
+              flashcardFront.value =   newFlashcardFront.textContent;
+              flashcardBack.value  = newFlashcardBack.textContent;
+              createdFlashcards.removeChild(newFlashcardContainer); //after click return input value
+            })
+            
+              imgShowBtn.addEventListener("click", () => {
+              
+                imgShowBtn.style.display = "none"
+    
+            
+              
+                  let presentFlashcard = document.createElement("div"); //make new container for elements
+                  body.appendChild(presentFlashcard); //add container for elements to body 
+                  presentFlashcard.classList.add("presentFlashcardPosition");// add class to container
+                  newFlashcardFront.classList.add("newFlashcardFront");
+                  newFlashcardBack.classList.add("newFlashcardBack" );
+                  presentFlashcard.appendChild(newFlashcardFront); 
+              
+                  presentFlashcard.appendChild(imgRotateBtn); //add elements to container
+                  imgRotateBtn.classList.add("positonAbsoluteShowBtn");
+                  let clonedImgCloseBtn = imgCloseBtn.cloneNode(true); // button cloned  imgCloseBtn
+                  presentFlashcard.appendChild(clonedImgCloseBtn); // append cloned button to present flashcard after click on  imgShowBtn
+                  
+                  clonedImgCloseBtn.addEventListener("click", () => {
+                    body.removeChild(presentFlashcard); //after click on clonedImgCloseBtn creater flashcards remove her
+                  
+                    imgShowBtn.style.display = "block"
+                  
+                });
+              
+                imgRotateBtn.addEventListener("click", () => {
+                      // true - false - false - true - false 
+                     if(isTurn) {
+                      presentFlashcard.appendChild(newFlashcardBack); 
+                      newFlashcardFront.replaceWith(newFlashcardBack)
+                      isTurn = false
+                     
+                      }
+                     else{
+                        presentFlashcard.appendChild(newFlashcardFront); 
+                        newFlashcardBack.replaceWith(newFlashcardFront)
+                        isTurn = true
+                   
+                     }
+                 
+              
+                });
+              });
+         
+            
+>>>>>>> a39f415 (comeback)
 
         // UPDATE  DATA  IN LocalStorage AFTER REMOVE FLASHCARD
 

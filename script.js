@@ -10,7 +10,7 @@ let app = {
   flashcards: [],
   flashcardSection: document.getElementById("flashcards"),
   repeatedFlashcard: {},
-  flashcardId: {}, // Dodanie obiektu flashcardId
+  flashcardId: {}, // Dodanie obiektu flashcardIdb
 };
 
 function loadFlashcardIdFromLocalStorage() {
